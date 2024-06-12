@@ -1,48 +1,69 @@
-import { Component, ViewChild } from '@angular/core';
-import { Actionnaire } from '../../Models/actionnaire';
-import { ActionnaireService } from '../../Services/actionnaire.service';
-import { Router } from '@angular/router';
-import { MatTableDataSource } from '@angular/material/table';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { EmetteurService } from '../../Services/emetteur.service';
+import { TitreService } from '../../Services/titre.service';
+import { ActionnaireService } from '../../Services/actionnaire.service';
 
 @Component({
-  selector: 'app-actionnaire',
-  templateUrl: './actionnaire.component.html',
-  styleUrl: './actionnaire.component.css'
+    selector: 'app-actionnaire',
+    templateUrl: './actionnaire.component.html',
+    styleUrls: ['./actionnaire.component.css']
 })
-export class ActionnaireComponent {
+export class ActionnaireComponent implements OnInit {
 
-  actionnaireList!: Actionnaire[];
-  actionnaires!: Actionnaire[];
-  dataSource:any;
-  displayedColumns = ['matricule','raisonSociale','identifiant'];
+    displayedColumns: string[] = ['matricule', 'raisonSociale', 'identifiant', 'libelleCourt', 'solde', 'codeNatureCompteTitre', 'codeCategorieAvoir', 'adresse'];
+    dataSource!: MatTableDataSource<any>;
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+    emetteurs: any[] = [];
+    titres: any[] = [];
+    selectedEmetteur!: string;
+    selectedTitre!: string;
 
-  constructor(private actionnaireService: ActionnaireService, private router: Router){
-    this.actionnaireService.getActionnaireList()
-    .subscribe(res => {
-      this.actionnaireList = res;
-      this.dataSource = new MatTableDataSource<Actionnaire>(this.actionnaireList);
-    });
-  }
+    @ViewChild(MatPaginator) paginator!: MatPaginator;
+    @ViewChild(MatSort) sort!: MatSort;
 
+    constructor(private http: HttpClient, private emetteurService: EmetteurService, private titreService: TitreService, private actionnaireService: ActionnaireService) { }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
+    ngOnInit(): void {
+        this.getEmetteurs();
     }
-  }
 
-  getActionnaire(){
-    this.actionnaireService.getActionnaireList().subscribe(data =>{
-      this.actionnaires = data;
-    })
-  }
+    getEmetteurs() {
+        this.emetteurService.getEmetteurList().subscribe(data => {
+            this.emetteurs = data;
+        });
+    }
 
+    onEmetteurChange(event: any): void {
+      this.selectedEmetteur = event.value;
+      this.titreService.getTitresByEmetteur(this.selectedEmetteur).subscribe(data => {
+        this.titres = data;
+      });
+    }
+
+    onTitreChange(event: any) {
+        this.selectedTitre = event.value;
+        this.getActionnaires(this.selectedEmetteur, this.selectedTitre);
+    }
+
+    getActionnaires(idEmetteur: string, idTitre: string) {
+        this.actionnaireService.getFilteredActionnaires(idEmetteur, idTitre).subscribe((data: any[]) => {
+            this.dataSource = new MatTableDataSource(data);
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+        });
+    }
+
+    applyFilter(event: Event) {
+        const filterValue = (event.target as HTMLInputElement).value;
+        this.dataSource.filter = filterValue.trim().toLowerCase();
+
+        if (this.dataSource.paginator) {
+            this.dataSource.paginator.firstPage();
+        }
+    }
 }
