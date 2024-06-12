@@ -59,11 +59,18 @@ export class ActionnaireComponent implements OnInit {
     }
 
     applyFilter(event: Event) {
-        const filterValue = (event.target as HTMLInputElement).value;
-        this.dataSource.filter = filterValue.trim().toLowerCase();
-
-        if (this.dataSource.paginator) {
-            this.dataSource.paginator.firstPage();
-        }
+      const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+      if (!filterValue) {
+        this.dataSource.filter = '';
+        return;
+      }
+    
+      this.dataSource.filterPredicate = (data: any, filter: string) => {
+        return data.matricule.toString().toLowerCase().includes(filter) ||
+               data.raisonSociale.toLowerCase().includes(filter) ||
+               data.identifiant.toLowerCase().includes(filter);
+      };
+    
+      this.dataSource.filter = filterValue;
     }
 }
