@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { ActionnaireComponent } from './Historique/actionnaire/actionnaire.component';
 
 const routes: Routes = [
-  //{path: '', component: HomeComponent},
+  {path: 'actionnaire', component: ActionnaireComponent},
 ];
 
 @NgModule({
