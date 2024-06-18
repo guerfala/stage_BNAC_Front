@@ -26,7 +26,7 @@ export class ActionnaireComponent implements OnInit {
     @ViewChild(MatPaginator) paginator!: MatPaginator;
     @ViewChild(MatSort) sort!: MatSort;
 
-    constructor(private http: HttpClient, private emetteurService: EmetteurService, private titreService: TitreService, private actionnaireService: ActionnaireService) { }
+    constructor(private emetteurService: EmetteurService, private titreService: TitreService, private actionnaireService: ActionnaireService) { }
 
     ngOnInit(): void {
         this.getEmetteurs();
@@ -55,6 +55,7 @@ export class ActionnaireComponent implements OnInit {
             this.dataSource = new MatTableDataSource(data);
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
+            console.log('Actionnaires', data);
         });
     }
 
