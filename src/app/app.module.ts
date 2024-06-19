@@ -19,12 +19,16 @@ import { MatSelectModule } from '@angular/material/select';
 import { EtatActionnaireComponent } from './Historique/etat-actionnaire/etat-actionnaire.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { SoldeTCComponent } from './Historique/solde-tc/solde-tc.component';
+import { StructureCapitalComponent } from './Historique/structure-capital/structure-capital.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ActionnaireComponent,
-    EtatActionnaireComponent
+    EtatActionnaireComponent,
+    SoldeTCComponent,
+    StructureCapitalComponent
   ],
   imports: [
     BrowserModule,
