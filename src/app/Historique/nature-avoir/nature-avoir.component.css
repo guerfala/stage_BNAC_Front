@@ -1,0 +1,31 @@
+.container {
+  margin: 20px;
+}
+
+.mat-elevation-z8 {
+  margin-bottom: 20px;
+}
+
+mat-form-field {
+  width: 100%;
+  margin-bottom: 40px;
+  .mat-column-libelleCourt {
+      width: 500px; /* Adjust width as needed */
+    }
+    
+    .mat-column-libelle{
+      width: 300px; /* Adjust width as needed */
+    }
+    .mat-header-cell, .mat-cell {
+      display: flex;
+      align-items: center;
+    }
+    
+    .mat-header-cell {
+      font-weight: bold;
+    }
+    
+   
+    
+    
+}

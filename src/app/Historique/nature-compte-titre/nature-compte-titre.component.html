@@ -1,0 +1,56 @@
+<div class="container">
+    <h2>Nature Compte Titre List</h2>
+    <table mat-table [dataSource]="natureCompteTitres" class="mat-elevation-z8">
+      <!-- ID Column -->
+      <ng-container matColumnDef="IdNatureCompteTitre">
+        <th mat-header-cell *matHeaderCellDef>ID</th>
+        <td mat-cell *matCellDef="let element">{{ element.idNatureCompteTitre }}</td>
+      </ng-container>
+  
+      <!-- Libelle Column -->
+      <ng-container matColumnDef="Libelle">
+        <th mat-header-cell *matHeaderCellDef>Libelle</th>
+        <td mat-cell *matCellDef="let element">{{ element.libelle }}</td>
+      </ng-container>
+  
+      <!-- CodeNatureCompteTitre Column -->
+      <ng-container matColumnDef="CodeNatureCompteTitre">
+        <th mat-header-cell *matHeaderCellDef>Code Nature Compte Titre</th>
+        <td mat-cell *matCellDef="let element">{{ element.codeNatureCompteTitre }}</td>
+      </ng-container>
+  
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button color="primary" (click)="editNatureCompteTitre(element)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteNatureCompteTitre(element.IdNatureCompteTitre)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+  
+      <!-- Header Row -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  
+      <!-- Data Rows -->
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  
+    <!-- Form for Add/Edit -->
+    <h2>{{ isEdit ? 'Edit' : 'Add' }} Nature Compte Titre</h2>
+    <form (ngSubmit)="isEdit ? updateNatureCompteTitre() : addNatureCompteTitre()">
+      <mat-form-field appearance="fill">
+        <mat-label>Libelle</mat-label>
+        <input matInput type="text" [(ngModel)]="natureCompteTitre.Libelle" name="libelle" required>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Code Nature Compte Titre</mat-label>
+        <input matInput type="text" [(ngModel)]="natureCompteTitre.CodeNatureCompteTitre" name="codeNatureCompteTitre" required>
+      </mat-form-field>
+      <button type="submit" class="btn btn-success">{{ isEdit ? 'Update' : 'Add' }}</button>
+    </form>
+  </div>
+  

@@ -1,0 +1,186 @@
+  <div class="container">
+    <h2>Teneur Compte List</h2>
+    <table mat-table [dataSource]="teneurComptes" class="mat-elevation-z8">
+  
+      <!-- ID Column -->
+      <ng-container matColumnDef="idTC">
+        <th mat-header-cell *matHeaderCellDef class="mat-cell">ID</th>
+        <td mat-cell *matCellDef="let element"class="mat-cell">{{element.idTC}}</td>
+      </ng-container>
+  
+      <!-- Libelle Court Column -->
+      <ng-container matColumnDef="libelleCourt">
+        <th mat-header-cell *matHeaderCellDef class="mat-header-cell mat-column-libelleCourt">Libelle Court</th>
+        <td mat-cell *matCellDef="let element" class="mat-cell mat-column-libelleCourt">{{element.libelleCourt}}</td>
+      </ng-container>
+  
+      <!-- Libelle Long Column -->
+      <ng-container matColumnDef="libelleLong">
+        <th mat-header-cell *matHeaderCellDef class="mat-cell">Libelle Long</th>
+        <td mat-cell *matCellDef="let element" class="mat-cell">{{element.libelleLong}}</td>
+      </ng-container>
+  
+      <!-- Tel Column -->
+      <ng-container matColumnDef="tel">
+        <th mat-header-cell *matHeaderCellDef>Tel</th>
+        <td mat-cell *matCellDef="let element">{{element.tel}}</td>
+      </ng-container>
+  
+      <!-- Fax Column -->
+      <ng-container matColumnDef="fax">
+        <th mat-header-cell *matHeaderCellDef>Fax</th>
+        <td mat-cell *matCellDef="let element">{{element.fax}}</td>
+      </ng-container>
+  
+      <!-- Adresse Column -->
+      <ng-container matColumnDef="adresse">
+        <th mat-header-cell *matHeaderCellDef>Adresse</th>
+        <td mat-cell *matCellDef="let element">{{element.adresse}}</td>
+      </ng-container>
+  
+      <!-- Code Postal Column -->
+      <ng-container matColumnDef="codePostal">
+        <th mat-header-cell *matHeaderCellDef>Code Postal</th>
+        <td mat-cell *matCellDef="let element">{{element.codePostal}}</td>
+      </ng-container>
+  
+      <!-- Ville Column -->
+      <ng-container matColumnDef="ville">
+        <th mat-header-cell *matHeaderCellDef>Ville</th>
+        <td mat-cell *matCellDef="let element">{{element.ville}}</td>
+      </ng-container>
+  
+      <!-- Email Column -->
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef>Email</th>
+        <td mat-cell *matCellDef="let element">{{element.email}}</td>
+      </ng-container>
+  
+      <!-- Contact Column -->
+      <ng-container matColumnDef="contact">
+        <th mat-header-cell *matHeaderCellDef>Contact</th>
+        <td mat-cell *matCellDef="let element">{{element.contact}}</td>
+      </ng-container>
+  
+      <!-- Fonction Contact Column -->
+      <ng-container matColumnDef="fonctionContact">
+        <th mat-header-cell *matHeaderCellDef>Fonction Contact</th>
+        <td mat-cell *matCellDef="let element">{{element.fonctionContact}}</td>
+      </ng-container>
+  
+      <!-- Premier Responsable Column -->
+      <ng-container matColumnDef="premierResponsable">
+        <th mat-header-cell *matHeaderCellDef>Premier Responsable</th>
+        <td mat-cell *matCellDef="let element">{{element.premierResponsable}}</td>
+      </ng-container>
+  
+      <!-- Fonction Premier Responsable Column -->
+      <ng-container matColumnDef="fonctionPremierResponsable">
+        <th mat-header-cell *matHeaderCellDef>Fonction Premier Responsable</th>
+        <td mat-cell *matCellDef="let element">{{element.fonctionPremierResponsable}}</td>
+      </ng-container>
+  
+      <!-- Civilite Premier Responsable Column -->
+      <ng-container matColumnDef="civilitePremierResponsable">
+        <th mat-header-cell *matHeaderCellDef>Civilite Premier Responsable</th>
+        <td mat-cell *matCellDef="let element">{{element.civilitePremierResponsable}}</td>
+      </ng-container>
+  
+      <!-- Id Emetteur Column -->
+      <ng-container matColumnDef="idEmetteur">
+        <th mat-header-cell *matHeaderCellDef>Id Emetteur</th>
+        <td mat-cell *matCellDef="let element">{{element.idEmetteur}}</td>
+      </ng-container>
+  
+      <!-- Code IAA Column -->
+      <ng-container matColumnDef="codeIAA">
+        <th mat-header-cell *matHeaderCellDef>Code IAA</th>
+        <td mat-cell *matCellDef="let element">{{element.codeIAA}}</td>
+      </ng-container>
+  
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button color="primary" (click)="editTeneurCompte(element)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteTeneurCompte(element.idTC)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+  
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  
+    <h2>{{ isEdit ? 'Edit' : 'Add' }} Teneur Compte</h2>
+    <form (ngSubmit)="isEdit ? updateTeneurCompte() : addTeneurCompte()">
+      <mat-form-field appearance="fill">
+        <mat-label>ID</mat-label>
+        <input matInput type="text" [(ngModel)]="teneurCompte.idTC" name="idTC" >
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Libelle Court</mat-label>
+        <input matInput type="text" [(ngModel)]="teneurCompte.libelleCourt" name="libelleCourt" required>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Libelle Long</mat-label>
+        <input matInput type="text" [(ngModel)]="teneurCompte.libelleLong" name="libelleLong" required>
+      </mat-form-field>
+  
+      <!-- Additional Form Fields -->
+      <mat-form-field appearance="fill">
+        <mat-label>Tel</mat-label>
+        <input matInput type="text" [(ngModel)]="teneurCompte.tel" name="tel">
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill">
+        <mat-label>Fax</mat-label>
+        <input matInput type="text" [(ngModel)]="teneurCompte.fax" name="fax">
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill">
+        <mat-label>Adresse</mat-label>
+        <input matInput type="text" [(ngModel)]="teneurCompte.adresse" name="adresse">
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill">
+        <mat-label>Code Postal</mat-label>
+        <input matInput type="text" [(ngModel)]="teneurCompte.codePostal" name="codePostal">
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill">
+        <mat-label>Ville</mat-label>
+        <input matInput type="text" [(ngModel)]="teneurCompte.ville" name="ville">
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" [(ngModel)]="teneurCompte.email" name="email">
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill">
+        <mat-label>Contact</mat-label>
+        <input matInput type="text" [(ngModel)]="teneurCompte.contact" name="contact">
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill">
+        <mat-label>Fonction Contact</mat-label>
+        <input matInput type="text" [(ngModel)]="teneurCompte.fonctionContact" name="fonctionContact">
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill">
+        <mat-label>Premier Responsable</mat-label>
+        <input matInput type="text" [(ngModel)]="teneurCompte.premierResponsable" name="premierResponsable">
+      </mat-form-field>
+  
+      <mat-form-field appearance="fill">
+        <mat-label>Fonction Premier Responsable</mat-label>
+        <input matInput type="text" [(ngModel)]="teneurCompte.fonctionPremierResponsable" name="fonction">
+    </mat-form-field>
+    <button type="submit" class="btn btn-success">{{ isEdit ? 'Update' : 'Add' }}</button>
+
+    </form>
+    </div>
