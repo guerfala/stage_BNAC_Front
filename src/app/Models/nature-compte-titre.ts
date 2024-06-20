@@ -1,6 +1,6 @@
 export interface NatureCompteTitre {
-    IdNatureCompteTitre: number;
-    Libelle: string;
-    CodeNatureCompteTitre: string;
+    idNatureCompteTitre: number;
+    libelle: string;
+    codeNatureCompteTitre: string;
   }
   

@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { NatureCompteTitreService } from '../../Services/nature-compte-titre.service';
+import { NatureCompteTitre } from '../../Models/nature-compte-titre';
+import { ConfirmationDialogComponent } from '../../confirmation-dialog/confirmation-dialog.component'; // Adjust path as per your project structure
 
 @Component({
   selector: 'app-nature-compte-titre',
@@ -7,69 +11,124 @@ import { NatureCompteTitreService } from '../../Services/nature-compte-titre.ser
   styleUrls: ['./nature-compte-titre.component.css']
 })
 export class NatureCompteTitreComponent implements OnInit {
-  natureCompteTitres: any[] = [];
-  natureCompteTitre: any = {};
-  isEdit: boolean = false;
+  displayedColumns: string[] = ['idNatureCompteTitre', 'libelle', 'codeNatureCompteTitre', 'actions'];
+  natureCompteTitres: NatureCompteTitre[] = [];
+  filteredNatureCompteTitres: NatureCompteTitre[] = [];
+  searchLibelle = '';
+  isEdit = false;
+  natureCompteTitre: NatureCompteTitre = this.createEmptyNatureCompteTitre();
 
-  displayedColumns: string[] = ['IdNatureCompteTitre', 'Libelle', 'CodeNatureCompteTitre', 'Actions'];
-
-  constructor(private natureCompteTitreService: NatureCompteTitreService) { }
+  constructor(private natureCompteTitreService: NatureCompteTitreService, private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.loadAllNatureCompteTitres();
   }
 
   loadAllNatureCompteTitres(): void {
-    this.natureCompteTitreService.getAllNatureCompteTitres().subscribe(data => {
-      this.natureCompteTitre = data;
-    });
+    this.natureCompteTitreService.getAllNatureCompteTitres().subscribe(
+      (data: any) => {
+        this.natureCompteTitres = data;
+        this.filteredNatureCompteTitres = [...this.natureCompteTitres]; // Initialize filtered list
+        this.applyFilter(); // Apply initial filter if searchLibelle is not empty
+      },
+      error => {
+        console.error('Error loading Nature Compte Titres:', error);
+      }
+    );
   }
-  addNatureCompteTitre() {
+
+  addNatureCompteTitre(form: NgForm): void {
     this.natureCompteTitreService.createNatureCompteTitre(this.natureCompteTitre).subscribe(
       (data: any) => {
         this.natureCompteTitres.push(data);
+        this.loadAllNatureCompteTitres(); // Reload table after adding
         this.clearForm();
+        form.resetForm(); // Reset the form after adding
       },
       error => {
-        console.log('Error adding nature compte titre: ', error);
+        console.error('Error adding Nature Compte Titre:', error);
       }
     );
   }
-
-  updateNatureCompteTitre() {
-    this.natureCompteTitreService.updateNatureCompteTitre(this.natureCompteTitre.IdNatureCompteTitre, this.natureCompteTitre).subscribe(
+  
+  updateNatureCompteTitre(): void {
+    this.natureCompteTitreService.updateNatureCompteTitre(this.natureCompteTitre.idNatureCompteTitre, this.natureCompteTitre).subscribe(
       (data: any) => {
         // Update existing record in natureCompteTitres
-        const index = this.natureCompteTitres.findIndex(item => item.IdNatureCompteTitre === data.IdNatureCompteTitre);
+        const index = this.natureCompteTitres.findIndex(item => item.idNatureCompteTitre === data.idNatureCompteTitre);
         if (index !== -1) {
           this.natureCompteTitres[index] = data;
         }
+        this.loadAllNatureCompteTitres(); // Reload table after updating
         this.clearForm();
       },
       error => {
-        console.log('Error updating nature compte titre: ', error);
+        console.error('Error updating Nature Compte Titre:', error);
       }
     );
   }
+  
 
-  editNatureCompteTitre(natureCompteTitre: any) {
-    this.isEdit = true;
-    this.natureCompteTitre = { ...natureCompteTitre }; // create a copy
-  }
-
-  deleteNatureCompteTitre(id: number) {
+  deleteNatureCompteTitre(id: number): void {
     this.natureCompteTitreService.deleteNatureCompteTitre(id).subscribe(
       () => {
-        this.natureCompteTitres = this.natureCompteTitres.filter(item => item.IdNatureCompteTitre !== id);
+        this.loadAllNatureCompteTitres();
       },
       error => {
-        console.log('Error deleting nature compte titre: ', error);
+        console.error('Erreur lors de la suppression de la nature d\'avoir:', error);
       }
     );
   }
 
-  clearForm() {
-    this.natureCompteTitre = {};
+
+
+
+  editNatureCompteTitre(selectedNatureCompteTitre: NatureCompteTitre): void {
+    this.natureCompteTitre = { ...selectedNatureCompteTitre };
+    this.isEdit = true;
+  }
+
+  clearForm(): void {
+    this.natureCompteTitre = this.createEmptyNatureCompteTitre();
     this.isEdit = false;
   }
+
+  applyFilter(): void {
+    const filterValue = this.searchLibelle.toLowerCase();
+    if (filterValue.length === 0) {
+      this.filteredNatureCompteTitres = [...this.natureCompteTitres]; // Reset to show all when filter is empty
+    } else {
+      this.filteredNatureCompteTitres = this.natureCompteTitres.filter(natureCompteTitre =>
+        natureCompteTitre.libelle.toLowerCase().includes(filterValue)
+      );
+    }
+  }
+
+  clearSearch(): void {
+    this.searchLibelle = '';
+    this.applyFilter(); // Reset filter to show all Nature Compte Titres
+  }
+
+  private createEmptyNatureCompteTitre(): NatureCompteTitre {
+    return {
+      idNatureCompteTitre: 0,
+      libelle: '',
+      codeNatureCompteTitre: ''
+    };
+  }
+  openDeleteConfirmationDialog(id: number): void {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '250px',
+      data: { message: 'Are you sure you want to delete this Nature Compte Titre?' }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.deleteNatureCompteTitre(id);
+      }
+    });
+  }
+
+
+
 }
