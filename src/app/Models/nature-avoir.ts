@@ -1,6 +1,5 @@
 export interface NatureAvoir {
-    IdNatureAvoirs: number;
-    Libelle: string;
-    CodeCategorieAvoir: string;
-  }
-  
+  idNatureAvoirs : number;
+  libelle: string;
+  codeCategorieAvoir: string;
+}

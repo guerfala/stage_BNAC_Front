@@ -21,7 +21,9 @@ import { TeneurCompteComponent } from './Historique/teneur-compte/teneur-compte.
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { NatureCompteTitreComponent } from './Historique/nature-compte-titre/nature-compte-titre.component'; 
+import { NatureCompteTitreComponent } from './Historique/nature-compte-titre/nature-compte-titre.component';
+import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component'; 
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 @NgModule({
@@ -33,7 +35,8 @@ import { NatureCompteTitreComponent } from './Historique/nature-compte-titre/nat
     TypeOperationComponent,
     TeneurCompteComponent,
     NatureAvoirComponent,
-    NatureCompteTitreComponent
+    NatureCompteTitreComponent,
+    ConfirmationDialogComponent,
    ],
   imports: [
     BrowserModule,
@@ -50,6 +53,7 @@ import { NatureCompteTitreComponent } from './Historique/nature-compte-titre/nat
     FormsModule,
     MatIconModule,
     FormsModule,
+    MatDialogModule
     
   ],
   providers: [
