@@ -17,4 +17,10 @@ export class OperationService {
     const formattedmaxDate = maxDate.toISOString();
     return this.httpClient.get<MouvementsDTO[]>(`${this.baseURL}ShowAllOperation/${idTitre}/${formattedminDate}/${formattedmaxDate}`);
   }
+
+  getMouvementsByTc(idTitre: string, minDate: Date, maxDate: Date, idTC: string): Observable<MouvementsDTO[]> {
+    const formattedminDate = minDate.toISOString();
+    const formattedmaxDate = maxDate.toISOString();
+    return this.httpClient.get<MouvementsDTO[]>(`${this.baseURL}ShowAllOperationByTc/${idTitre}/${formattedminDate}/${formattedmaxDate}/${idTC}`);
+  }
 }

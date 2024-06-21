@@ -7,6 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import jsPDF from 'jspdf';
 import { OperationService } from '../../Services/operation.service';
 import { TeneurCompteService } from '../../Services/teneur-compte.service';
+import { TeneurCompte } from '../../Models/teneur-compte';
 
 @Component({
   selector: 'app-mouvements',
@@ -20,7 +21,7 @@ export class MouvementsComponent {
 
     emetteurs: any[] = [];
     titres: any[] = [];
-    teneurCompte: any[] = [];
+    teneurCompte: TeneurCompte[] = [];
     selectedEmetteur!: string;
     selectedTitre!: string;
     selectedTC!: string;
@@ -62,16 +63,29 @@ export class MouvementsComponent {
   }
 
   onTCChange(event: any) {
-    /*this.selectedTC = event.value;
-    this.actionnaireService.getEtatActionnairesByEmetteurAndTitreAndTc(this.selectedEmetteur, this.selectedTitre, this.selectedTC, this.selectedDate).subscribe((data: any[]) => {
-      this.dataSource = new MatTableDataSource(data);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-  });*/
+    this.selectedTC = event.value;
+    this.getMouvementsByTc();
   }
 
   getMouvements(idTitre: string) {
     this.operationService.getMouvements(idTitre, this.minDate, this.maxDate).subscribe((data: any[]) => {
+      this.dataSource = new MatTableDataSource(data);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      this.dataSource.filterPredicate = (data: any, filter: string) => {
+        return data.tc.toString().toLowerCase().includes(filter) ||
+               data.dateBourse.toString().toLowerCase().includes(filter) ||
+               data.actionnaire.toString().toLowerCase().includes(filter) ||
+               data.numContrat.toString().toLowerCase().includes(filter) ||
+               data.vente.toString().toLowerCase().includes(filter) ||
+               data.achat.toString().toLowerCase().includes(filter) ||
+               data.cours.toString().toLowerCase().includes(filter);
+      };
+    });
+  }
+  
+  getMouvementsByTc(){
+    this.operationService.getMouvementsByTc(this.selectedTitre, this.minDate, this.maxDate, this.selectedTC).subscribe((data: any[]) => {
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
