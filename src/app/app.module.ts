@@ -21,6 +21,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { SoldeTCComponent } from './Historique/solde-tc/solde-tc.component';
 import { StructureCapitalComponent } from './Historique/structure-capital/structure-capital.component';
+import { JournalComponent } from './Historique/journal/journal.component';
+import { MouvementsComponent } from './Historique/mouvements/mouvements.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +31,8 @@ import { StructureCapitalComponent } from './Historique/structure-capital/struct
     EtatActionnaireComponent,
     SoldeTCComponent,
     StructureCapitalComponent,
+    JournalComponent,
+    MouvementsComponent,
   ],
   imports: [
     BrowserModule,

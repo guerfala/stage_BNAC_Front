@@ -5,24 +5,24 @@ import { MatTableDataSource } from '@angular/material/table';
 import { EmetteurService } from '../../Services/emetteur.service';
 import { TitreService } from '../../Services/titre.service';
 import { TeneurCompteService } from '../../Services/teneur-compte.service';
-import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
 @Component({
-  selector: 'app-solde-tc',
-  templateUrl: './solde-tc.component.html',
-  styleUrl: './solde-tc.component.css'
+  selector: 'app-journal',
+  templateUrl: './journal.component.html',
+  styleUrl: './journal.component.css'
 })
-export class SoldeTCComponent {
+export class JournalComponent {
 
-  displayedColumns: string[] = ['idTC', 'libelleCourt', 'codeNatureCompteTitre', 'codeCategorieAvoir', 'solde'];
+  displayedColumns: string[] = ['idTC', 'dateBourse', 'typeOP', 'raisonSociale', 'idTitre', 'numContrat', 'quantite'];
     dataSource!: MatTableDataSource<any>;
 
     emetteurs: any[] = [];
     titres: any[] = [];
     selectedEmetteur!: string;
     selectedTitre!: string;
-    selectedDate: Date = new Date();
+    minDate: Date = new Date();
+    maxDate: Date = new Date();
 
     @ViewChild(MatPaginator) paginator!: MatPaginator;
     @ViewChild(MatSort) sort!: MatSort;
@@ -52,7 +52,7 @@ export class SoldeTCComponent {
   }
 
   getTC(idTitre: string) {
-    this.tenneurCompteService.getAllTeneurCompteWithSolde(idTitre, this.selectedDate).subscribe((data: any[]) => {
+    this.tenneurCompteService.getAllTeneurCompteWithSolde(idTitre, this.minDate).subscribe((data: any[]) => {
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;

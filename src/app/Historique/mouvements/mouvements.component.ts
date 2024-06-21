@@ -1,33 +1,36 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
 import { EmetteurService } from '../../Services/emetteur.service';
 import { TitreService } from '../../Services/titre.service';
-import { TeneurCompteService } from '../../Services/teneur-compte.service';
-import html2canvas from 'html2canvas';
+import { MatTableDataSource } from '@angular/material/table';
 import jsPDF from 'jspdf';
+import { OperationService } from '../../Services/operation.service';
+import { TeneurCompteService } from '../../Services/teneur-compte.service';
 
 @Component({
-  selector: 'app-solde-tc',
-  templateUrl: './solde-tc.component.html',
-  styleUrl: './solde-tc.component.css'
+  selector: 'app-mouvements',
+  templateUrl: './mouvements.component.html',
+  styleUrl: './mouvements.component.css'
 })
-export class SoldeTCComponent {
+export class MouvementsComponent {
 
-  displayedColumns: string[] = ['idTC', 'libelleCourt', 'codeNatureCompteTitre', 'codeCategorieAvoir', 'solde'];
+  displayedColumns: string[] = ['libelleCourt', 'dateBourse', 'actionnaire', 'numContrat', 'achat','vente', 'cours'];
     dataSource!: MatTableDataSource<any>;
 
     emetteurs: any[] = [];
     titres: any[] = [];
+    teneurCompte: any[] = [];
     selectedEmetteur!: string;
     selectedTitre!: string;
-    selectedDate: Date = new Date();
+    selectedTC!: string;
+    minDate: Date = new Date();
+    maxDate: Date = new Date();
 
     @ViewChild(MatPaginator) paginator!: MatPaginator;
     @ViewChild(MatSort) sort!: MatSort;
 
-    constructor(private emetteurService: EmetteurService, private titreService: TitreService, private tenneurCompteService: TeneurCompteService) { }
+    constructor(private emetteurService: EmetteurService, private titreService: TitreService, private operationService: OperationService, private teneurCompteService: TeneurCompteService) { }
 
     ngOnInit(): void {
       this.getEmetteurs();
@@ -39,6 +42,12 @@ export class SoldeTCComponent {
       });
   }
 
+  getTC() {
+    this.teneurCompteService.getTC().subscribe(data => {
+      this.teneurCompte = data;
+    });
+  }
+
   onEmetteurChange(event: any): void {
     this.selectedEmetteur = event.value;
     this.titreService.getTitresByEmetteur(this.selectedEmetteur).subscribe(data => {
@@ -48,20 +57,32 @@ export class SoldeTCComponent {
 
   onTitreChange(event: any) {
       this.selectedTitre = event.value;
-      this.getTC(this.selectedTitre);
+      this.getTC();
+      this.getMouvements(this.selectedTitre);
   }
 
-  getTC(idTitre: string) {
-    this.tenneurCompteService.getAllTeneurCompteWithSolde(idTitre, this.selectedDate).subscribe((data: any[]) => {
+  onTCChange(event: any) {
+    /*this.selectedTC = event.value;
+    this.actionnaireService.getEtatActionnairesByEmetteurAndTitreAndTc(this.selectedEmetteur, this.selectedTitre, this.selectedTC, this.selectedDate).subscribe((data: any[]) => {
+      this.dataSource = new MatTableDataSource(data);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+  });*/
+  }
+
+  getMouvements(idTitre: string) {
+    this.operationService.getMouvements(idTitre, this.minDate, this.maxDate).subscribe((data: any[]) => {
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
       this.dataSource.filterPredicate = (data: any, filter: string) => {
-        return data.idTC.toString().toLowerCase().includes(filter) ||
-               data.libelleCourt.toLowerCase().includes(filter) ||
-               data.codeNatureCompteTitre.toLowerCase().includes(filter) ||
-               data.codeCategorieAvoir.toLowerCase().includes(filter) ||
-               data.solde.toString().toLowerCase().includes(filter);
+        return data.tc.toString().toLowerCase().includes(filter) ||
+               data.dateBourse.toString().toLowerCase().includes(filter) ||
+               data.actionnaire.toString().toLowerCase().includes(filter) ||
+               data.numContrat.toString().toLowerCase().includes(filter) ||
+               data.vente.toString().toLowerCase().includes(filter) ||
+               data.achat.toString().toLowerCase().includes(filter) ||
+               data.cours.toString().toLowerCase().includes(filter);
       };
     });
   }
