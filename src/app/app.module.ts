@@ -28,7 +28,7 @@ import { StructureCapitalComponent } from './Historique/structure-capital/struct
     ActionnaireComponent,
     EtatActionnaireComponent,
     SoldeTCComponent,
-    StructureCapitalComponent
+    StructureCapitalComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,75 @@
+<mat-form-field>
+    <mat-label>Emetteur</mat-label>
+    <mat-select [(value)]="selectedEmetteur" (selectionChange)="onEmetteurChange($event)">
+      <mat-option *ngFor="let emetteur of emetteurs" [value]="emetteur.idEmetteur">
+        {{emetteur.libelleCourt}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  
+  <mat-form-field>
+    <mat-label>Titre</mat-label>
+    <mat-select [(value)]="selectedTitre" (selectionChange)="onTitreChange($event)">
+      <mat-option *ngFor="let titre of titres" [value]="titre.idTitre">
+        {{titre.libelleCourt}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Minimum Pourcentage</mat-label>
+    <input matInput #numberInput type="number" [(ngModel)]="minPourcentage" (keydown.enter)="onPourcentageChange($event)" placeholder="Enter minimum pourcentage">
+  </mat-form-field>
+  
+  <mat-form-field>
+    <mat-label>Date</mat-label>
+    <input matInput [matDatepicker]="picker" [(ngModel)]="selectedDate">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+  
+  <mat-form-field>
+    <mat-label>Filter</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Search" #input>
+  </mat-form-field>
+  
+  <div class="buttons">
+    <button mat-raised-button color="primary" (click)="generatePdf()">Generate PDF</button>
+    <button mat-raised-button color="primary" (click)="sortByIdTC('asc')">Sort ASC</button>
+    <button mat-raised-button color="primary" (click)="sortByIdTC('desc')">Sort DESC</button>
+  </div>
+  
+  <div class="mat-elevation-z8" id="pdfTable">
+    <table mat-table [dataSource]="dataSource" matSort>
+      <ng-container matColumnDef="Matricule">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Matricule </th>
+        <td mat-cell *matCellDef="let row"> {{row.matricule}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="RaisonSociale">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Raison Sociale </th>
+        <td mat-cell *matCellDef="let row"> {{row.raisonSociale}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="Pourcentage">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Pourcentage </th>
+        <td mat-cell *matCellDef="let row"> {{row.prtage}} {{row.libelleNC}} </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="Solde">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Solde </th>
+        <td mat-cell *matCellDef="let row"> {{row.solde}} {{row.libelleNa}} </td>
+      </ng-container>
+  
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  
+      <!-- Row shown when there is no matching data. -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="8">No data matching the filter "{{input.value}}"</td>
+      </tr>
+    </table>
+  
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+  </div>
+  
