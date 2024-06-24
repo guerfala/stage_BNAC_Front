@@ -6,5 +6,6 @@ export class MouvementsDTO {
     vente!: number;
     achat!: number;
     cours!: number;
+    solde!: number;
     
 }

@@ -15,12 +15,24 @@ export class OperationService {
   getMouvements(idTitre: string, minDate: Date, maxDate: Date): Observable<MouvementsDTO[]> {
     const formattedminDate = minDate.toISOString();
     const formattedmaxDate = maxDate.toISOString();
-    return this.httpClient.get<MouvementsDTO[]>(`${this.baseURL}ShowAllOperation/${idTitre}/${formattedminDate}/${formattedmaxDate}`);
+    return this.httpClient.get<MouvementsDTO[]>(`${this.baseURL}ShowAllMouvements/${idTitre}/${formattedminDate}/${formattedmaxDate}`);
   }
 
   getMouvementsByTc(idTitre: string, minDate: Date, maxDate: Date, idTC: string): Observable<MouvementsDTO[]> {
     const formattedminDate = minDate.toISOString();
     const formattedmaxDate = maxDate.toISOString();
-    return this.httpClient.get<MouvementsDTO[]>(`${this.baseURL}ShowAllOperationByTc/${idTitre}/${formattedminDate}/${formattedmaxDate}/${idTC}`);
+    return this.httpClient.get<MouvementsDTO[]>(`${this.baseURL}ShowAllMouvementsByTc/${idTitre}/${formattedminDate}/${formattedmaxDate}/${idTC}`);
+  }
+
+  getMouvementsByMatricule(idTitre: string, minDate: Date, maxDate: Date, matricule: number): Observable<MouvementsDTO[]> {
+    const formattedminDate = minDate.toISOString();
+    const formattedmaxDate = maxDate.toISOString();
+    return this.httpClient.get<MouvementsDTO[]>(`${this.baseURL}ShowAllMouvementsByMatricule/${idTitre}/${formattedminDate}/${formattedmaxDate}/${matricule}`);
+  }
+
+  getMouvementsByMatriculeAndByTc(idTitre: string, minDate: Date, maxDate: Date, idTC: string, matricule: number): Observable<MouvementsDTO[]> {
+    const formattedminDate = minDate.toISOString();
+    const formattedmaxDate = maxDate.toISOString();
+    return this.httpClient.get<MouvementsDTO[]>(`${this.baseURL}ShowAllMouvementsByTc/${idTitre}/${formattedminDate}/${formattedmaxDate}/${idTC}/${matricule}`);
   }
 }

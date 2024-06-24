@@ -38,6 +38,11 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Matricule</mat-label>
+    <input matInput [(ngModel)]="matricule" placeholder="Enter Matricule" (keyup.enter)="onMatriculeChange()">
+  </mat-form-field>
   
   <mat-form-field>
     <mat-label>Filter</mat-label>
