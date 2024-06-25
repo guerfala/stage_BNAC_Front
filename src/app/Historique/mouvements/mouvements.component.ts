@@ -68,26 +68,30 @@ export class MouvementsComponent {
   onTitreChange(event: any) {
       this.selectedTitre = event.value;
       this.getTC();
-      this.getMouvements(this.selectedTitre);
+      this.onFieldChange();
   }
 
   onTCChange(event: any) {
     this.selectedTC = event.value;
-    this.getMouvementsByTc();
+    this.onFieldChange();
   }
 
   onMatriculeChange(){
-    if(this.matricule.toString() == "" && this.selectedTC == "")
+    this.onFieldChange();
+  }
+
+  onFieldChange(){
+    if(this.matricule == 0 && this.selectedTC == "")
       {
         this.getMouvements(this.selectedTitre);
       }
-    else if(this.matricule.toString() == ""){
+    else if(this.matricule == 0 && this.selectedTC != ""){
         this.getMouvementsByTc();
       }
-    else if(this.selectedTC == ""){
+    else if(this.matricule != 0 && this.selectedTC == ""){
         this.getMouvementsByMatricule(this.matricule);
       }
-    else{
+    else if(this.matricule != 0 && this.selectedTC != ""){
         this.getMouvementsByMatriculeAndByTc();
       }
   }
@@ -145,6 +149,7 @@ export class MouvementsComponent {
   
   getMouvementsByMatriculeAndByTc(){
     this.operationService.getMouvementsByMatriculeAndByTc(this.selectedTitre, this.minDate, this.maxDate, this.selectedTC, this.matricule).subscribe((data: any[]) => {
+      console.log(data[0].solde);
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;

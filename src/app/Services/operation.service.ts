@@ -34,7 +34,7 @@ export class OperationService {
   getMouvementsByMatriculeAndByTc(idTitre: string, minDate: Date, maxDate: Date, idTC: string, matricule: number): Observable<MouvementsDTO[]> {
     const formattedminDate = minDate.toISOString();
     const formattedmaxDate = maxDate.toISOString();
-    return this.httpClient.get<MouvementsDTO[]>(`${this.baseURL}ShowAllMouvementsByTc/${idTitre}/${formattedminDate}/${formattedmaxDate}/${idTC}/${matricule}`);
+    return this.httpClient.get<MouvementsDTO[]>(`${this.baseURL}ShowAllMouvementsByMatriculeAndTc/${idTitre}/${formattedminDate}/${formattedmaxDate}/${matricule}/${idTC}`);
   }
 
   getJournals(idTitre: string, minDate: Date, maxDate: Date): Observable<JournalsDTO[]> {
@@ -59,5 +59,29 @@ export class OperationService {
     const formattedminDate = minDate.toISOString();
     const formattedmaxDate = maxDate.toISOString();
     return this.httpClient.get<JournalsDTO[]>(`${this.baseURL}ShowAllJournalsByTypeOperationAndTc/${idTitre}/${formattedminDate}/${formattedmaxDate}/${typeOp}/${tc}`);
+  }
+
+  getJournalsByMatricule(idTitre: string, minDate: Date, maxDate: Date, matricule: number): Observable<JournalsDTO[]> {
+    const formattedminDate = minDate.toISOString();
+    const formattedmaxDate = maxDate.toISOString();
+    return this.httpClient.get<JournalsDTO[]>(`${this.baseURL}ShowAllJournalsByMatricule/${idTitre}/${formattedminDate}/${formattedmaxDate}/${matricule}`);
+  }
+
+  getJournalsByMatriculeAndTc(idTitre: string, minDate: Date, maxDate: Date, matricule: number, tc: string): Observable<JournalsDTO[]> {
+    const formattedminDate = minDate.toISOString();
+    const formattedmaxDate = maxDate.toISOString();
+    return this.httpClient.get<JournalsDTO[]>(`${this.baseURL}ShowAllJournalsByMatricule/${idTitre}/${formattedminDate}/${formattedmaxDate}/${matricule}/${tc}`);
+  }
+
+  getJournalsByMatriculeAndTypeOp(idTitre: string, minDate: Date, maxDate: Date, matricule: number, typeOp: string): Observable<JournalsDTO[]> {
+    const formattedminDate = minDate.toISOString();
+    const formattedmaxDate = maxDate.toISOString();
+    return this.httpClient.get<JournalsDTO[]>(`${this.baseURL}ShowAllJournalsByMatriculeAndTypeOp/${idTitre}/${formattedminDate}/${formattedmaxDate}/${matricule}/${typeOp}`);
+  }
+
+  getJournalsByMatriculeAndByTcAndByTypeOp(idTitre: string, minDate: Date, maxDate: Date, matricule: number, tc: string, typeOp: string): Observable<JournalsDTO[]> {
+    const formattedminDate = minDate.toISOString();
+    const formattedmaxDate = maxDate.toISOString();
+    return this.httpClient.get<JournalsDTO[]>(`${this.baseURL}ShowAllJournalsByMatriculeAndByTcAndByTypeOp/${idTitre}/${formattedminDate}/${formattedmaxDate}/${matricule}/${tc}/${typeOp}`);
   }
 }

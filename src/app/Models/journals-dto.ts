@@ -7,4 +7,5 @@ export class JournalsDTO {
     numContrat!: string;
     debit!: number;
     credit!: number;
+    idOp!: number;
 }

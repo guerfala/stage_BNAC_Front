@@ -56,7 +56,7 @@ getEmetteurs() {
     });
 }
 
-onEmetteurChange(event: any): void {
+onEmetteurChange(event: any): void { 
   this.selectedEmetteur = event.value;
   this.titreService.getTitresByEmetteur(this.selectedEmetteur).subscribe(data => {
     this.titres = data;
@@ -64,10 +64,9 @@ onEmetteurChange(event: any): void {
 }
 
 onTitreChange(event: any) {
-    this.selectedTitre = event.value;
-    this.getJournals(this.selectedTitre);
-    this.getTC();
-    this.getTypeOp();
+  this.onFieldChange();
+  this.getTC();
+  this.getTypeOp();
 }
 
 getTC() {
@@ -77,11 +76,7 @@ getTC() {
 }
 
 onTCChange(event: any) {
-  this.selectedTC = event.value;
-  if(this.selectedType == "")
-    this.getJournalsByTc();
-  else
-    this.getJournalsByTypeOpAndTc();
+  this.onFieldChange();
 }
 
 getTypeOp() {
@@ -91,30 +86,38 @@ getTypeOp() {
 }
 
 onTypeOpChange(event: any) {
-  this.selectedType = event.value;
-  if(this.selectedTC == "")
-    {
-      this.getJournalsByTypeOp();
-    }
-  else
-    {
-      this.getJournalsByTypeOpAndTc();
-    }
+  this.onFieldChange();
 }
 
 onMatriculeChange(){
-  if(this.matricule.toString() == "" && this.selectedTC == "")
+  this.onFieldChange();
+}
+
+onFieldChange(){ 
+  if(this.matricule == 0 && this.selectedTC == "" && this.selectedType == "")
     {
       this.getJournals(this.selectedTitre);
     }
-  else if(this.matricule.toString() == ""){
+  else if(this.matricule == 0 && this.selectedTC == "" && this.selectedType != ""){
+      this.getJournalsByTypeOp();
+    }
+  else if(this.matricule == 0 && this.selectedTC != "" && this.selectedType == ""){
       this.getJournalsByTc();
     }
-  else if(this.selectedTC == ""){
-      this.getMouvementsByMatricule(this.matricule);
+  else if(this.matricule != 0 && this.selectedTC == "" && this.selectedType == ""){
+      this.getJournalsByMatricule(this.matricule);
     }
-  else{
-      this.getMouvementsByMatriculeAndByTc();
+  else if(this.matricule == 0 && this.selectedTC != "" && this.selectedType != ""){
+      this.getJournalsByTypeOpAndTc();
+    }
+  else if(this.matricule != 0 && this.selectedTC != "" && this.selectedType == ""){
+      this.getJournalsByMatriculeAndByTc();
+    }
+  else if(this.matricule != 0 && this.selectedTC == "" && this.selectedType != ""){
+      this.getJournalsByMatriculeAndByTypeOp();
+    }
+  else if(this.matricule != 0 && this.selectedTC != "" && this.selectedType != ""){
+      this.getJournalsByMatriculeAndByTcAndByTypeOp();
     }
 }
 
@@ -132,6 +135,7 @@ getJournals(idTitre: string) {
              data.achat.toString().toLowerCase().includes(filter) ||
              data.cours.toString().toLowerCase().includes(filter);
     };
+     ;
   });
 }
 
@@ -149,6 +153,7 @@ getJournalsByTc(){
              data.achat.toString().toLowerCase().includes(filter) ||
              data.cours.toString().toLowerCase().includes(filter);
     };
+     ;
   });
 }
 
@@ -166,6 +171,7 @@ getJournalsByTypeOp(){
              data.achat.toString().toLowerCase().includes(filter) ||
              data.cours.toString().toLowerCase().includes(filter);
     };
+     ;
   });
 }
 
@@ -183,11 +189,12 @@ getJournalsByTypeOpAndTc(){
              data.achat.toString().toLowerCase().includes(filter) ||
              data.cours.toString().toLowerCase().includes(filter);
     };
+     ;
   });
 }
 
-getMouvementsByMatricule(matricule: number) {
-  this.operationService.getMouvementsByMatricule(this.selectedTitre, this.minDate, this.maxDate, matricule).subscribe((data: any[]) => {
+getJournalsByMatricule(matricule: number) {
+  this.operationService.getJournalsByMatricule(this.selectedTitre, this.minDate, this.maxDate, matricule).subscribe((data: any[]) => {
     this.dataSource = new MatTableDataSource(data);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
@@ -200,11 +207,12 @@ getMouvementsByMatricule(matricule: number) {
              data.achat.toString().toLowerCase().includes(filter) ||
              data.cours.toString().toLowerCase().includes(filter);
     };
+     ;
   });
 }
 
-getMouvementsByMatriculeAndByTc(){
-  this.operationService.getMouvementsByMatriculeAndByTc(this.selectedTitre, this.minDate, this.maxDate, this.selectedTC, this.matricule).subscribe((data: any[]) => {
+getJournalsByMatriculeAndByTc(){
+  this.operationService.getJournalsByMatriculeAndTc(this.selectedTitre, this.minDate, this.maxDate, this.matricule, this.selectedTC).subscribe((data: any[]) => {
     this.dataSource = new MatTableDataSource(data);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
@@ -217,6 +225,43 @@ getMouvementsByMatriculeAndByTc(){
              data.achat.toString().toLowerCase().includes(filter) ||
              data.cours.toString().toLowerCase().includes(filter);
     };
+     ;
+  });
+}
+
+getJournalsByMatriculeAndByTypeOp(){
+  this.operationService.getJournalsByMatriculeAndTypeOp(this.selectedTitre, this.minDate, this.maxDate, this.matricule, this.selectedType).subscribe((data: any[]) => {
+    this.dataSource = new MatTableDataSource(data);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+    this.dataSource.filterPredicate = (data: any, filter: string) => {
+      return data.tc.toString().toLowerCase().includes(filter) ||
+             data.dateBourse.toString().toLowerCase().includes(filter) ||
+             data.actionnaire.toString().toLowerCase().includes(filter) ||
+             data.numContrat.toString().toLowerCase().includes(filter) ||
+             data.vente.toString().toLowerCase().includes(filter) ||
+             data.achat.toString().toLowerCase().includes(filter) ||
+             data.cours.toString().toLowerCase().includes(filter);
+    };
+     ;
+  });
+}
+
+getJournalsByMatriculeAndByTcAndByTypeOp(){
+  this.operationService.getJournalsByMatriculeAndByTcAndByTypeOp(this.selectedTitre, this.minDate, this.maxDate, this.matricule, this.selectedTC, this.selectedType).subscribe((data: any[]) => {
+    this.dataSource = new MatTableDataSource(data);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+    this.dataSource.filterPredicate = (data: any, filter: string) => {
+      return data.tc.toString().toLowerCase().includes(filter) ||
+             data.dateBourse.toString().toLowerCase().includes(filter) ||
+             data.actionnaire.toString().toLowerCase().includes(filter) ||
+             data.numContrat.toString().toLowerCase().includes(filter) ||
+             data.vente.toString().toLowerCase().includes(filter) ||
+             data.achat.toString().toLowerCase().includes(filter) ||
+             data.cours.toString().toLowerCase().includes(filter);
+    };
+     ;
   });
 }
 
