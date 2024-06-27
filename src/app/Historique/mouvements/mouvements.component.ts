@@ -9,6 +9,7 @@ import { OperationService } from '../../Services/operation.service';
 import { TeneurCompteService } from '../../Services/teneur-compte.service';
 import { TeneurCompte } from '../../Models/teneur-compte';
 import { format } from 'date-fns';
+import { SoldeDTO } from '../../Models/solde-dto';
 
 @Component({
   selector: 'app-mouvements',
@@ -33,6 +34,7 @@ export class MouvementsComponent {
     today!: string;
     totalVente: number = 0;
     totalAchat: number = 0;
+    solde!: SoldeDTO;
 
     @ViewChild(MatPaginator) paginator!: MatPaginator;
     @ViewChild(MatSort) sort!: MatSort;
@@ -89,7 +91,7 @@ export class MouvementsComponent {
         this.getMouvementsByTc();
       }
     else if(this.matricule != 0 && this.selectedTC == ""){
-        this.getMouvementsByMatricule(this.matricule);
+        this.getMouvementsByMatricule();
       }
     else if(this.matricule != 0 && this.selectedTC != ""){
         this.getMouvementsByMatriculeAndByTc();
@@ -130,8 +132,8 @@ export class MouvementsComponent {
     });
   }
 
-  getMouvementsByMatricule(matricule: number) {
-    this.operationService.getMouvementsByMatricule(this.selectedTitre, this.minDate, this.maxDate, matricule).subscribe((data: any[]) => {
+  getMouvementsByMatricule() {
+    this.operationService.getMouvementsByMatricule(this.selectedTitre, this.minDate, this.maxDate, this.matricule).subscribe((data: any[]) => {
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
@@ -145,11 +147,14 @@ export class MouvementsComponent {
                data.cours.toString().toLowerCase().includes(filter);
       };
     });
+
+    this.operationService.getActionnaireMouvement(this.selectedTitre, this.maxDate, this.matricule).subscribe((solde: any) => {
+      this.solde = solde;
+  });
   }
   
   getMouvementsByMatriculeAndByTc(){
     this.operationService.getMouvementsByMatriculeAndByTc(this.selectedTitre, this.minDate, this.maxDate, this.selectedTC, this.matricule).subscribe((data: any[]) => {
-      console.log(data[0].solde);
       this.dataSource = new MatTableDataSource(data);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
@@ -163,6 +168,10 @@ export class MouvementsComponent {
                data.cours.toString().toLowerCase().includes(filter);
       };
     });
+
+    this.operationService.getActionnaireMouvement(this.selectedTitre, this.maxDate, this.matricule).subscribe((solde: any) => {
+      this.solde = solde;
+  });
   }
 
   applyFilter(event: Event) {

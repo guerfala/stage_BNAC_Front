@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { MouvementsDTO } from '../Models/mouvements-dto';
 import { HttpClient } from '@angular/common/http';
 import { JournalsDTO } from '../Models/journals-dto';
+import { SoldeDTO } from '../Models/solde-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -35,6 +36,11 @@ export class OperationService {
     const formattedminDate = minDate.toISOString();
     const formattedmaxDate = maxDate.toISOString();
     return this.httpClient.get<MouvementsDTO[]>(`${this.baseURL}ShowAllMouvementsByMatriculeAndTc/${idTitre}/${formattedminDate}/${formattedmaxDate}/${matricule}/${idTC}`);
+  }
+
+  getActionnaireMouvement(idTitre: string, maxDate: Date, matricule: number): Observable<SoldeDTO[]> {
+    const formattedmaxDate = maxDate.toISOString();
+    return this.httpClient.get<SoldeDTO[]>(`${this.baseURL}GetActionnaireMouvement/${idTitre}/${formattedmaxDate}/${matricule}`);
   }
 
   getJournals(idTitre: string, minDate: Date, maxDate: Date): Observable<JournalsDTO[]> {
@@ -70,7 +76,7 @@ export class OperationService {
   getJournalsByMatriculeAndTc(idTitre: string, minDate: Date, maxDate: Date, matricule: number, tc: string): Observable<JournalsDTO[]> {
     const formattedminDate = minDate.toISOString();
     const formattedmaxDate = maxDate.toISOString();
-    return this.httpClient.get<JournalsDTO[]>(`${this.baseURL}ShowAllJournalsByMatricule/${idTitre}/${formattedminDate}/${formattedmaxDate}/${matricule}/${tc}`);
+    return this.httpClient.get<JournalsDTO[]>(`${this.baseURL}ShowAllJournalsByMatriculeAndTc/${idTitre}/${formattedminDate}/${formattedmaxDate}/${matricule}/${tc}`);
   }
 
   getJournalsByMatriculeAndTypeOp(idTitre: string, minDate: Date, maxDate: Date, matricule: number, typeOp: string): Observable<JournalsDTO[]> {

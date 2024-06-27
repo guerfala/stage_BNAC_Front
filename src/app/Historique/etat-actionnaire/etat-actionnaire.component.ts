@@ -86,6 +86,7 @@ export class EtatActionnaireComponent implements OnInit {
 
     onTitreChange(event: any) {
         this.selectedTitre = event.value;
+        this.getActionnaires(this.selectedEmetteur, this.selectedTitre);
     }
 
     onTCChange(event: any) {

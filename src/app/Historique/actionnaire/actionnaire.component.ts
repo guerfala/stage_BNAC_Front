@@ -67,8 +67,7 @@ export class ActionnaireComponent implements OnInit {
     
       this.dataSource.filterPredicate = (data: any, filter: string) => {
         return data.matricule.toString().toLowerCase().includes(filter) ||
-               data.raisonSociale.toLowerCase().includes(filter) ||
-               data.identifiant.toLowerCase().includes(filter);
+               data.raisonSociale.toLowerCase().includes(filter);
       };
     
       this.dataSource.filter = filterValue;
