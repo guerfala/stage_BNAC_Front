@@ -6,12 +6,20 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ImportService {
-  private baseUrl = 'http://localhost:8081/bnac'; 
 
-  constructor(private httpClient: HttpClient) { }
+  private baseUrl = 'http://localhost:8081/bnac'; // Update with your backend URL
 
-  getEmetteursLibelleCourt(): Observable<{ libelleCourt: string }[]> {
-    return this.httpClient.get<{ libelleCourt: string }[]>(`${this.baseUrl}/libelleCourt`);
+  constructor(private http: HttpClient) {}
+
+  getEmetteurLibelleCourts(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.baseUrl}/libelleCourt`);
   }
 
+  getTitreLibelleCourtsByEmetteurId(emetteurId: string): Observable<string[]> {
+    return this.http.get<string[]>(`${this.baseUrl}/titres/${emetteurId}`);
+  }
+
+  uploadFile(formData: FormData): Observable<any> {
+    return this.http.post(`${this.baseUrl}/upload`, formData);
+  }
 }

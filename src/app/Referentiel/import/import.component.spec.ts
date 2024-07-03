@@ -11,7 +11,7 @@ describe('ImportComponent', () => {
       declarations: [ImportComponent]
     })
     .compileComponents();
-    
+
     fixture = TestBed.createComponent(ImportComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

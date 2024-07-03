@@ -19,8 +19,7 @@ const routes: Routes = [
   { path: 'nature-avoir', component: NatureAvoirComponent },
   { path: 'nature-compte-titre', component: NatureCompteTitreComponent },
   { path: 'titre', component: TitreComponent },
-  { path: 'import', component: ImportComponent },
-
+  {path:'import',component:ImportComponent},
 
 
 

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ImportService } from '../../Services/import.service';
 
 @Component({
@@ -9,37 +9,47 @@ import { ImportService } from '../../Services/import.service';
 })
 export class ImportComponent implements OnInit {
   importForm: FormGroup;
-  emetteurs: { libelleCourt: string }[] = [];
+  emetteurs: string[] = [];
+  titres: string[] = [];
+  selectedFile: File | null = null;
 
   constructor(private fb: FormBuilder, private importService: ImportService) {
     this.importForm = this.fb.group({
-      emetteur: ['', Validators.required],
-      date: ['', Validators.required],
-      radioOption: ['', Validators.required]
+      emetteur: [''],
+      titre: [''],
+      date: [''],
+      radioOption: ['']
     });
   }
 
-  ngOnInit(): void {
-    this.fetchEmetteurs();
-}
-
-fetchEmetteurs(): void {
-    this.importService.getEmetteursLibelleCourt().subscribe(data => {
-        this.emetteurs = data;
-        console.log('Mapped Emetteurs:', this.emetteurs); // Ensure data is fetched
-    }, error => {
-        console.error('Error fetching emetteurs:', error); // Handle error
+  ngOnInit() {
+    this.importService.getEmetteurLibelleCourts().subscribe(data => {
+      this.emetteurs = data;
     });
-}
+  }
 
-  onSubmit(): void {
-    if (this.importForm.invalid) {
-      return;
+  onEmetteurChange(emetteur: string) {
+    this.importService.getTitreLibelleCourtsByEmetteurId(emetteur).subscribe(data => {
+      this.titres = data;
+    });
+  }
+
+  onFileChange(event: any) {
+    this.selectedFile = event.target.files[0];
+  }
+
+  onSubmit() {
+    const formData = new FormData();
+    if (this.selectedFile) {
+      formData.append('file', this.selectedFile);
     }
+    formData.append('emetteur', this.importForm.get('emetteur')?.value);
+    formData.append('titre', this.importForm.get('titre')?.value);
+    formData.append('date', this.importForm.get('date')?.value);
+    formData.append('radioOption', this.importForm.get('radioOption')?.value);
 
-    const formValue = this.importForm.value;
-    console.log('Form submitted:', formValue);
-
-    // Handle form submission logic
+    this.importService.uploadFile(formData).subscribe(response => {
+      console.log('File uploaded successfully');
+    });
   }
 }
