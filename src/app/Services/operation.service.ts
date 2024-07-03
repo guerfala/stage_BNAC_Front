@@ -1,18 +1,22 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Operation } from '../Models/operation';
+import { catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OperationService {
 
-  private baseURL = "http://localhost:8081/bnac/";
+  private baseUrl = 'http://localhost:8081/bnac'; 
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-  getOperationList(): Observable<Operation[]> {
-    return this.httpClient.get<Operation[]>(`${this.baseURL}ShowAllOperation`);
+  filterOperations(filterCriteria: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/operations/filter`, filterCriteria);
+  }
+
+  getActionnaireDetails(matricule: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/operations/actionnaire/${matricule}`);
   }
 }

@@ -15,4 +15,8 @@ export class EmetteurService {
   getEmetteurList(): Observable<Emetteur[]>{
     return this.httpClient.get<Emetteur[]>(`${this.baseURL+"ShowAllEmetteur"}`);
   }
+
+  getAllEmetteurLibelleCourt(): Observable<string[]> {
+    return this.httpClient.get<string[]>(`${this.baseURL}/libelleCourt`);
+  }
 }

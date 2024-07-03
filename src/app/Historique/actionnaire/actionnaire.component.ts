@@ -40,9 +40,9 @@ export class ActionnaireComponent implements OnInit {
 
     onEmetteurChange(event: any): void {
       this.selectedEmetteur = event.value;
-      this.titreService.getTitresByEmetteur(this.selectedEmetteur).subscribe(data => {
-        this.titres = data;
-      });
+     // this.titreService.getTitresByEmetteur(this.selectedEmetteur).subscribe(data => {
+       // this.titres = data;
+     // });
     }
 
     onTitreChange(event: any) {

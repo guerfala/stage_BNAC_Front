@@ -56,7 +56,7 @@
 
   <!-- Form for Add/Edit -->
   <h2>{{ isEdit ? 'Edit' : 'Add' }} Nature Compte Titre</h2>
-  <form #natureCompteTitreForm="ngForm" (ngSubmit)="isEdit ? updateNatureCompteTitre() : addNatureCompteTitre(natureCompteTitreForm)">
+  <form #natureCompteTitreForm="ngForm" (ngSubmit)="isEdit ? updateNatureCompteTitre(natureCompteTitreForm) : addNatureCompteTitre(natureCompteTitreForm)">
     <mat-form-field appearance="fill">
       <mat-label>Libelle</mat-label>
       <input matInput type="text" [(ngModel)]="natureCompteTitre.libelle" name="libelle" required>

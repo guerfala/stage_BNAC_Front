@@ -6,7 +6,6 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { ActionnaireComponent } from './Historique/actionnaire/actionnaire.component';
-import { OperationComponent } from './Historique/operation/operation.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTableModule } from '@angular/material/table';
@@ -18,25 +17,36 @@ import { MatSelectModule } from '@angular/material/select';
 import { NatureAvoirComponent } from './Historique/nature-avoir/nature-avoir.component';
 import { TypeOperationComponent } from './Historique/type-operation/type-operation.component';
 import { TeneurCompteComponent } from './Historique/teneur-compte/teneur-compte.component';
-import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { NatureCompteTitreComponent } from './Historique/nature-compte-titre/nature-compte-titre.component';
-import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component'; 
-import { MatDialogModule } from '@angular/material/dialog';
+import { TitreComponent } from './Historique/titre/titre.component'; 
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ImportComponent } from './Referentiel/import/import.component';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+
+
 
 
 @NgModule({
   declarations: [
     AppComponent,
     ActionnaireComponent,
-    OperationComponent,
+    TitreComponent,
     NatureAvoirComponent,
     TypeOperationComponent,
     TeneurCompteComponent,
     NatureAvoirComponent,
     NatureCompteTitreComponent,
-    ConfirmationDialogComponent,
+    TitreComponent,
+    ImportComponent,
+    
+
+
+
    ],
   imports: [
     BrowserModule,
@@ -53,11 +63,18 @@ import { MatDialogModule } from '@angular/material/dialog';
     FormsModule,
     MatIconModule,
     FormsModule,
-    MatDialogModule
+    ReactiveFormsModule,
+    MatIconModule,
+    MatRadioModule,
+    MatButtonModule,
+    MatIconModule,
+    AppRoutingModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     
   ],
   providers: [
-    provideAnimationsAsync()
+    provideAnimationsAsync(),
   ],
   bootstrap: [AppComponent]
 })

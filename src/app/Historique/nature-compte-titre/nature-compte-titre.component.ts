@@ -51,7 +51,7 @@ export class NatureCompteTitreComponent implements OnInit {
     );
   }
   
-  updateNatureCompteTitre(): void {
+  updateNatureCompteTitre(form: NgForm): void {
     this.natureCompteTitreService.updateNatureCompteTitre(this.natureCompteTitre.idNatureCompteTitre, this.natureCompteTitre).subscribe(
       (data: any) => {
         // Update existing record in natureCompteTitres
@@ -60,13 +60,15 @@ export class NatureCompteTitreComponent implements OnInit {
           this.natureCompteTitres[index] = data;
         }
         this.loadAllNatureCompteTitres(); // Reload table after updating
-        this.clearForm();
+        this.clearForm(); 
+        form.resetForm();// Clear the form and reset ngModel bindings
       },
       error => {
         console.error('Error updating Nature Compte Titre:', error);
       }
     );
   }
+  
   
 
   deleteNatureCompteTitre(id: number): void {

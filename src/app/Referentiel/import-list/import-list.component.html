@@ -1,0 +1,59 @@
+<div class="container">
+    <h2>Import List</h2>
+    <table mat-table [dataSource]="imports" class="mat-elevation-z8">
+      <!-- ID Column -->
+      <ng-container matColumnDef="idImport">
+        <th mat-header-cell *matHeaderCellDef>ID</th>
+        <td mat-cell *matCellDef="let element">{{ element.idImport }}</td>
+      </ng-container>
+  
+      <!-- Libelle Column -->
+      <ng-container matColumnDef="libelle">
+        <th mat-header-cell *matHeaderCellDef>Libelle</th>
+        <td mat-cell *matCellDef="let element">{{ element.libelle }}</td>
+      </ng-container>
+  
+      <!-- Emetteur Column -->
+      <ng-container matColumnDef="emetteur">
+        <th mat-header-cell *matHeaderCellDef>Emetteur</th>
+        <td mat-cell *matCellDef="let element">{{ element.emetteur.libelleCourt }}</td>
+      </ng-container>
+  
+      <!-- Titre Column -->
+      <ng-container matColumnDef="titre">
+        <th mat-header-cell *matHeaderCellDef>Titre</th>
+        <td mat-cell *matCellDef="let element">{{ element.codeSISIN }}</td>
+      </ng-container>
+  
+      <!-- Date Operation Column -->
+      <ng-container matColumnDef="dateOperation">
+        <th mat-header-cell *matHeaderCellDef>Date Operation</th>
+        <td mat-cell *matCellDef="let element">{{ element.dateOperation | date }}</td>
+      </ng-container>
+  
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button color="primary" (click)="editImport(element)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteImport(element.idImport)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+  
+      <!-- Header Row -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  
+      <!-- Data Rows -->
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  
+      <!-- Placeholder for empty table -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="5">No data available</td>
+      </tr>
+    </table>
+  </div>
+  

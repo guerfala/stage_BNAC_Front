@@ -1,16 +1,16 @@
-import { Emetteur } from "./emetteur";
-
-export class Titre {
-    idTitre!: string;
-    libelleCourt!: string;
-    libelleLong!: string;
-    idCategorieTitre!: string;
-    nominal!: number;
-    nombre!: number;
-    pourcentage!: number;
-    codeStico!: string;
-    codeSISIN!: string;
-    matriculeDroitNonConverti!: string;
-    matriculeDroitConverti!: string;
-    emetteur!: Emetteur;
+export interface Titre {
+  IdTitre: string;
+  LibelleCourt: string;
+  LibelleLong: string;
+  IdCategorieTitre: string;
+  Nominal: number;
+  Nombre: number;
+  Pourcentage: number;
+  CodeStico: string;
+  CodeSISIN: string;
+  MatriculeDroitNonConverti: string;
+  MatriculeDroitConverti: string;
+ 
+    IdEmetteur: string;
+  
 }

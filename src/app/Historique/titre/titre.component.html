@@ -1,0 +1,140 @@
+<div class="container">
+  <h2>Titre List</h2>
+
+    <!-- Search Input -->
+  <mat-form-field>
+    <mat-label>Recherche par Libelle, ID ou Emetteur</mat-label>
+    <input matInput type="text" [(ngModel)]="searchTerm" (input)="applyFilter()" placeholder="Type to search...">
+    <button mat-button *ngIf="searchTerm" matSuffix mat-icon-button aria-label="Clear" (click)="clearSearch()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+
+
+  <mat-table [dataSource]="filteredTitres" class="mat-elevation-z8">
+    <!-- Columns definitions -->
+    <ng-container matColumnDef="IdTitre">
+      <mat-header-cell *matHeaderCellDef>Id Titre</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.idTitre}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="LibelleCourt">
+      <mat-header-cell *matHeaderCellDef>Libelle Court</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.libelleCourt}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="LibelleLong">
+      <mat-header-cell *matHeaderCellDef>Libelle Long</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.libelleLong}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="IdCategorieTitre">
+      <mat-header-cell *matHeaderCellDef>Categorie Titre</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.idCategorieTitre}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="Nominal">
+      <mat-header-cell *matHeaderCellDef>Nominal</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.nominal}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="Nombre">
+      <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.nombre}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="Pourcentage">
+      <mat-header-cell *matHeaderCellDef>Pourcentage</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.pourcentage}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="CodeStico">
+      <mat-header-cell *matHeaderCellDef>Code Stico</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.codeStico}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="CodeSISIN">
+      <mat-header-cell *matHeaderCellDef>Code SISIN</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.codeSISIN}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="MatriculeDroitNonConverti">
+      <mat-header-cell *matHeaderCellDef>Matricule Droit Non Converti</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.matriculeDroitNonConverti}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="MatriculeDroitConverti">
+      <mat-header-cell *matHeaderCellDef>Matricule Droit Converti</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.matriculeDroitConverti}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="IdEmetteur">
+      <mat-header-cell *matHeaderCellDef>Emetteur</mat-header-cell>
+      <mat-cell *matCellDef="let element">{{element.idEmetteur}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <button mat-button (click)="editTitre(element)">Edit</button>
+        <button mat-button (click)="deleteTitre(element.idTitre)">Delete</button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+
+  <h2>{{ isEdit ? 'Edit' : 'Add' }} Titre</h2>
+  <form #titreForm="ngForm" (ngSubmit)="isEdit ? updateTitre(titreForm) : addTitre(titreForm)">
+    <mat-form-field appearance="fill">
+      <mat-label>ID</mat-label>
+      <input matInput type="text" [(ngModel)]="titre.IdTitre" name="IdTitre" required>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Libelle Court</mat-label>
+      <input matInput type="text" [(ngModel)]="titre.LibelleCourt" name="LibelleCourt" required>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Libelle Long</mat-label>
+      <input matInput type="text" [(ngModel)]="titre.LibelleLong" name="LibelleLong" required>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>ID Categorie Titre</mat-label>
+      <input matInput type="text" [(ngModel)]="titre.IdCategorieTitre" name="IdCategorieTitre" required>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Nominal</mat-label>
+      <input matInput type="number" [(ngModel)]="titre.Nominal" name="Nominal" required>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Nombre</mat-label>
+      <input matInput type="number" [(ngModel)]="titre.Nombre" name="Nombre" required>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Pourcentage</mat-label>
+      <input matInput type="number" [(ngModel)]="titre.Pourcentage" name="Pourcentage" required>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Code Stico</mat-label>
+      <input matInput type="text" [(ngModel)]="titre.CodeStico" name="CodeStico" required>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Code SISIN</mat-label>
+      <input matInput type="text" [(ngModel)]="titre.CodeSISIN" name="CodeSISIN" required>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Matricule Droit Non Converti</mat-label>
+      <input matInput type="text" [(ngModel)]="titre.MatriculeDroitNonConverti" name="MatriculeDroitNonConverti" required>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Matricule Droit Converti</mat-label>
+      <input matInput type="text" [(ngModel)]="titre.MatriculeDroitConverti" name="MatriculeDroitConverti" required>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Emetteur</mat-label>
+      <input matInput type="text" [(ngModel)]="titre.IdEmetteur" name="IdEmetteur" required>
+    </mat-form-field>
+    <button type="submit" mat-raised-button color="primary">{{ isEdit ? 'Update' : 'Add' }}</button>
+  </form>
+</div>

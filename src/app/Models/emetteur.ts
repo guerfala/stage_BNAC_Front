@@ -1,9 +1,9 @@
-export class Emetteur {
-    idEmetteur!: string;
-    derMatricule!: number;
-    libelleCourt!: string;
-    libelleLong!: string;
-    codeStico!: string;
+export interface Emetteur {
+    idEmetteur: string;
+    derMatricule: number;
+    LibelleCourt: string;
+    libelleLong: string;
+    codeStico: string;
     tel?: string;
     fax?: string;
     adresse?: string;
