@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ImportService } from '../../Services/import.service';
+import { HttpClient } from '@angular/common/http';
+import * as Papa from 'papaparse';
 
 @Component({
   selector: 'app-import',
@@ -11,15 +13,19 @@ export class ImportComponent implements OnInit {
   importForm: FormGroup;
   emetteurs: string[] = [];
   titres: string[] = [];
-  selectedFile: File | null = null;
+  csvData: any[] = [];
+  file: File | null = null;
+  selectedEmetteur: string = '';
+  selectedTitre: string = '';
 
-  constructor(private fb: FormBuilder, private importService: ImportService) {
+  constructor(private fb: FormBuilder, private importService: ImportService,private http: HttpClient) {
     this.importForm = this.fb.group({
       emetteur: [''],
       titre: [''],
       date: [''],
       radioOption: ['']
     });
+    
   }
 
   ngOnInit() {
@@ -34,22 +40,21 @@ export class ImportComponent implements OnInit {
     });
   }
 
-  onFileChange(event: any) {
-    this.selectedFile = event.target.files[0];
+  onFileSelected(event: any) {
+    this.file = event.target.files[0];
   }
 
   onSubmit() {
-    const formData = new FormData();
-    if (this.selectedFile) {
-      formData.append('file', this.selectedFile);
-    }
-    formData.append('emetteur', this.importForm.get('emetteur')?.value);
-    formData.append('titre', this.importForm.get('titre')?.value);
-    formData.append('date', this.importForm.get('date')?.value);
-    formData.append('radioOption', this.importForm.get('radioOption')?.value);
+    const formData: FormData = new FormData();
+    formData.append('file', this.file!, this.file!.name);
+    formData.append('emetteur', this.selectedEmetteur);
+    formData.append('titre', this.selectedTitre);
 
     this.importService.uploadFile(formData).subscribe(response => {
-      console.log('File uploaded successfully');
+      console.log(response);
+    }, error => {
+      console.error('Error uploading file:', error);
     });
   }
+  
 }
