@@ -1,15 +1,13 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ImportService {
 
-  private baseUrl = 'http://localhost:8081/bnac'; 
+  private baseUrl = 'http://localhost:8081/bnac'; // Update with your backend URL
 
   constructor(private http: HttpClient) {}
 
@@ -21,12 +19,7 @@ export class ImportService {
     return this.http.get<string[]>(`${this.baseUrl}/titres/${emetteurId}`);
   }
 
-  importData(data: any[]): Observable<any> {
-    return this.http.post<any>(`${this.baseUrl}/import`, data);
-  } 
-
   uploadFile(formData: FormData): Observable<any> {
     return this.http.post(`${this.baseUrl}/upload`, formData);
   }
 }
- 

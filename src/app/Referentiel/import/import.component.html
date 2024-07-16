@@ -22,7 +22,7 @@
     </mat-form-field>
 
     <div>
-      <input type="file" id="file" (change)="onFileSelected($event)" />
+      <input type="file" (change)="onFileChange($event)" />
     </div>
 
     <mat-radio-group formControlName="radioOption">
@@ -32,5 +32,6 @@
 
     <br><br>
 
-    <button (click)="onSubmit()">Submit</button>  </form>
+    <button mat-raised-button color="primary" type="submit">Submit</button>
+  </form>
 </div>
