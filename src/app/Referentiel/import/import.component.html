@@ -1,0 +1,40 @@
+<div class="container mat-elevation-z8">
+  <form [formGroup]="importForm">
+    <mat-form-field>
+      <mat-label>Emetteur</mat-label>
+      <mat-select [(value)]="selectedEmetteur" (selectionChange)="onEmetteurChange($event)">
+          <mat-option *ngFor="let emetteur of emetteurs" [value]="emetteur.idEmetteur">
+              {{emetteur.libelleCourt}}
+          </mat-option>
+      </mat-select>
+  </mat-form-field>
+  
+  <mat-form-field>
+      <mat-label>Titre</mat-label>
+      <mat-select [(value)]="selectedTitre" (selectionChange)="onTitreChange($event)">
+          <mat-option *ngFor="let titre of titres" [value]="titre.idTitre">
+              {{titre.libelleCourt}}
+          </mat-option>
+      </mat-select>
+  </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Date</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="date" required>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <div>
+      <input type="file" id="file" (change)="ReadExcel($event)" />
+    </div>
+
+    <mat-radio-group formControlName="radioOption">
+      <mat-radio-button value="FGO">FGO</mat-radio-button>
+      <mat-radio-button value="FCRA">FCRA</mat-radio-button>
+    </mat-radio-group>
+
+    <br><br>
+
+    <button (click)="onSubmit()">Submit</button>  </form>
+</div>

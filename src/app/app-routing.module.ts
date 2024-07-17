@@ -6,6 +6,7 @@ import { SoldeTCComponent } from './Historique/solde-tc/solde-tc.component';
 import { StructureCapitalComponent } from './Historique/structure-capital/structure-capital.component';
 import { JournalComponent } from './Historique/journal/journal.component';
 import { MouvementsComponent } from './Historique/mouvements/mouvements.component';
+import { ImportComponent } from './Referentiel/import/import.component';
 
 const routes: Routes = [
   {path: 'actionnaire', component: ActionnaireComponent},
@@ -14,6 +15,7 @@ const routes: Routes = [
   {path: 'structureCapital', component: StructureCapitalComponent},
   {path: 'journal', component: JournalComponent},
   {path: 'mouvements', component: MouvementsComponent},
+  {path: 'import', component: ImportComponent},
 ];
 
 @NgModule({

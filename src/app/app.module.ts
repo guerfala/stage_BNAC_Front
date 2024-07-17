@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
@@ -23,6 +23,8 @@ import { SoldeTCComponent } from './Historique/solde-tc/solde-tc.component';
 import { StructureCapitalComponent } from './Historique/structure-capital/structure-capital.component';
 import { JournalComponent } from './Historique/journal/journal.component';
 import { MouvementsComponent } from './Historique/mouvements/mouvements.component';
+import { ImportComponent } from './Referentiel/import/import.component';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
   declarations: [
@@ -33,6 +35,7 @@ import { MouvementsComponent } from './Historique/mouvements/mouvements.componen
     StructureCapitalComponent,
     JournalComponent,
     MouvementsComponent,
+    ImportComponent,
   ],
   imports: [
     BrowserModule,
@@ -49,6 +52,8 @@ import { MouvementsComponent } from './Historique/mouvements/mouvements.componen
     MatSelectModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatRadioModule,
+    ReactiveFormsModule,
   ],
   providers: [
     provideAnimationsAsync()
