@@ -19,6 +19,7 @@ export class ImportComponent implements OnInit {
   selectedEmetteur!: string;
   selectedTitre!: string;
   em!: Emetteur;
+  selectedType!: string;
 
   importForm: FormGroup;
   csvData: any[] = [];
@@ -56,11 +57,6 @@ export class ImportComponent implements OnInit {
     this.selectedTitre = event.value;
   }
 
-  onFileSelected(event: any) {
-    this.file = event.target.files[0];
-    console.log(this.file);
-  }
-
   onSubmit() {
     this.imported.forEach(element => {
       this.importService.saveImportData(element, this.selectedEmetteur).subscribe(data => {
@@ -71,41 +67,7 @@ export class ImportComponent implements OnInit {
     });
   }
 
-  /*ReadExcel(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      const fileReader = new FileReader();
-      fileReader.readAsBinaryString(file);
-
-      fileReader.onload = (e) => {
-        const workBook = XLSX.read(fileReader.result as string, { type: 'binary' });
-        const sheetNames = workBook.SheetNames;
-        this.ExcelData = XLSX.utils.sheet_to_json(workBook.Sheets[sheetNames[0]]);
-
-        this.ExcelData.forEach((row: any) => {
-          let imp = new Import();
-          imp.Client = row['Nom du client'];
-          imp.TypeClient = row['TYPEe'];
-          imp.Nationalite = row['Nationalité'];
-          imp.Nature_id = row['Nature de l’identification'];
-          imp.Identifiant = row['Identifiant National'];
-          imp.CAVE = row['CAVE'];
-          imp.Solde = row['Solde'];
-          imp.CodeSISIN = row['CodeSISIN'];
-          imp.Titre = this.selectedTitre;
-          imp.TypeDeResidence = row['TypeDeResidence'];
-          imp.DateDeNaissance = new Date(row['DateDeNaissance']);
-          imp.Adresse = row['Adresse'];
-          imp.DateBourse = new Date(row['DateBourse']);
-          imp.emetteur = null;
-          this.imported.push(imp);
-        });
-        console.log(this.imported);
-      };
-    }
-  }*/
-
-    ReadExcel(event: any): void {
+  ReadFCRA(event: any): void {
       const file = event.target.files[0];
       if (file) {
           const fileReader = new FileReader();
@@ -155,6 +117,72 @@ export class ImportComponent implements OnInit {
               console.log(this.imported);
           };
       }
+  }
+
+  ReadFGO(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+        const fileReader = new FileReader();
+        fileReader.readAsBinaryString(file);
+
+        fileReader.onload = (e) => {
+            const workBook = XLSX.read(fileReader.result as string, { type: 'binary' });
+            const sheetNames = workBook.SheetNames;
+            const excelData: any[] = XLSX.utils.sheet_to_json(workBook.Sheets[sheetNames[0]]);
+
+            this.imported = excelData.map(row => ({
+                adresse: row['Adresse'],
+                cave: row['CAVE'],
+                cavr: '', // Set this based on your data or leave empty
+                client: row['Nom du client'],
+                code_operation: '', // Set this based on your data or leave empty
+                codesisin: row['CodeSISIN'],
+                date_bourse: new Date(row['DateBourse']),
+                date_de_naissance: new Date(row['DateDeNaissance']),
+                date_import: new Date(), // Assuming the import date is now
+                date_operation: new Date(), // Set this based on your data or leave empty
+                identifiant: row['Identifiant National'],
+                libelle: '', // Set this based on your data or leave empty
+                nationalite: row['Nationalité'],
+                nature_client: '', // Set this based on your data or leave empty
+                nature_compte: '', // Set this based on your data or leave empty
+                nature_comptee: '', // Set this based on your data or leave empty
+                nature_compter: '', // Set this based on your data or leave empty
+                nature_id: row['Nature de l’identification'],
+                num_contrat: '', // Set this based on your data or leave empty
+                quantite: 0, // Assuming quantity is not in your data
+                sens_comptable: 0, // Set this based on your data or leave empty
+                solde: row['Solde'],
+                statut: '', // Set this based on your data or leave empty
+                tc: '', // Set this based on your data or leave empty
+                tce: '', // Set this based on your data or leave empty
+                tcr: '', // Set this based on your data or leave empty
+                titre: this.selectedTitre,
+                treated: true, // Set this based on your data or leave empty
+                type_client: row['TYPEe'],
+                type_de_residence: row['TypeDeResidence'],
+                type_import: '', // Set this based on your data or leave empty
+                cav: 0, // Set this based on your data or leave empty
+                emetteur: null // Assuming emetteur ID needs to be set separately
+            }));
+
+            console.log(this.imported);
+        };
+    }
+  }
+
+
+  onRadioOptionChange() {
+    this.importForm.get('radioOption')?.valueChanges.subscribe(value => {
+      this.selectedType = value;
+    });
+  }
+
+  ReadExcel(event: any){
+    if(this.selectedType === 'FGO')
+      this.ReadFGO(event);
+    else if(this.selectedType === 'FCRA')
+      this.ReadFCRA(event);
   }
   
 
