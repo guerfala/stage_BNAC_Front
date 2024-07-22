@@ -58,59 +58,72 @@ export class ImportComponent implements OnInit {
   }
 
   onSubmit() {
-    this.imported.forEach(element => {
-      this.importService.saveImportData(element, this.selectedEmetteur).subscribe(data => {
-        console.log(data);
-      }, error => {
-        console.error("Error importing data:", error);
+    if (this.selectedType == 'FGO')
+    {
+      this.imported.forEach(element => {
+        this.importService.saveImportDataFGO(element, this.selectedEmetteur).subscribe(data => {
+          console.log(data);
+        }, error => {
+          console.error("Error importing data:", error);
+        });
       });
-    });
+    }
+    else if (this.selectedType == 'FCRA')
+    {
+      this.imported.forEach(element => {
+        this.importService.saveImportDataFCRA(element, this.selectedEmetteur).subscribe(data => {
+          console.log(data);
+        }, error => {
+          console.error("Error importing data:", error);
+        });
+      });
+    }
   }
 
   ReadFCRA(event: any): void {
       const file = event.target.files[0];
       if (file) {
           const fileReader = new FileReader();
-          fileReader.readAsBinaryString(file);
+          fileReader.readAsArrayBuffer(file);
   
           fileReader.onload = (e) => {
-              const workBook = XLSX.read(fileReader.result as string, { type: 'binary' });
+              const workBook = XLSX.read(fileReader.result as ArrayBuffer, { type: 'array' });
               const sheetNames = workBook.SheetNames;
               const excelData: any[] = XLSX.utils.sheet_to_json(workBook.Sheets[sheetNames[0]]);
   
               this.imported = excelData.map(row => ({
                   adresse: row['Adresse'],
-                  cave: row['CAVE'],
-                  cavr: '', // Set this based on your data or leave empty
+                  cave: '',
+                  cavr: '', 
                   client: row['Nom du client'],
-                  code_operation: '', // Set this based on your data or leave empty
-                  codesisin: row['CodeSISIN'],
-                  date_bourse: new Date(row['DateBourse']),
-                  date_de_naissance: new Date(row['DateDeNaissance']),
+                  code_operation: '', 
+                  codesisin: row['ISIN'],
+                  date_bourse: this.formatDate(row['Date comptable']),
+                  date_de_naissance: this.formatDate(row['Date de Naissance']),
                   date_import: new Date(), // Assuming the import date is now
-                  date_operation: new Date(), // Set this based on your data or leave empty
+                  date_operation: new Date(), 
                   identifiant: row['Identifiant National'],
-                  libelle: '', // Set this based on your data or leave empty
+                  libelle: '', 
                   nationalite: row['Nationalité'],
-                  nature_client: '', // Set this based on your data or leave empty
-                  nature_compte: '', // Set this based on your data or leave empty
-                  nature_comptee: '', // Set this based on your data or leave empty
-                  nature_compter: '', // Set this based on your data or leave empty
+                  nature_client: row['TYPEe'], 
+                  nature_compte: row['Restrictions'], 
+                  nature_comptee: '', 
+                  nature_compter: '', 
                   nature_id: row['Nature de l’identification'],
-                  num_contrat: '', // Set this based on your data or leave empty
+                  num_contrat: '', 
                   quantite: 0, // Assuming quantity is not in your data
-                  sens_comptable: 0, // Set this based on your data or leave empty
+                  sens_comptable: '', 
                   solde: row['Solde'],
-                  statut: '', // Set this based on your data or leave empty
-                  tc: '', // Set this based on your data or leave empty
-                  tce: '', // Set this based on your data or leave empty
-                  tcr: '', // Set this based on your data or leave empty
+                  statut: '', 
+                  tc: row['Participant'], 
+                  tce: '', 
+                  tcr: '', 
                   titre: this.selectedTitre,
-                  treated: true, // Set this based on your data or leave empty
-                  type_client: row['TYPEe'],
-                  type_de_residence: row['TypeDeResidence'],
-                  type_import: '', // Set this based on your data or leave empty
-                  cav: 0, // Set this based on your data or leave empty
+                  treated: true, 
+                  type_client: row['Type du client'],
+                  type_de_residence: row['Type de résidence'],
+                  type_import: '', 
+                  cav: row['Catégorie d\'avoir'], 
                   emetteur: null // Assuming emetteur ID needs to be set separately
               }));
   
@@ -121,48 +134,48 @@ export class ImportComponent implements OnInit {
 
   ReadFGO(event: any): void {
     const file = event.target.files[0];
-    if (file) {
-        const fileReader = new FileReader();
-        fileReader.readAsBinaryString(file);
-
-        fileReader.onload = (e) => {
-            const workBook = XLSX.read(fileReader.result as string, { type: 'binary' });
-            const sheetNames = workBook.SheetNames;
-            const excelData: any[] = XLSX.utils.sheet_to_json(workBook.Sheets[sheetNames[0]]);
+      if (file) {
+          const fileReader = new FileReader();
+          fileReader.readAsArrayBuffer(file);
+  
+          fileReader.onload = (e) => {
+              const workBook = XLSX.read(fileReader.result as ArrayBuffer, { type: 'array' });
+              const sheetNames = workBook.SheetNames;
+              const excelData: any[] = XLSX.utils.sheet_to_json(workBook.Sheets[sheetNames[0]]);
 
             this.imported = excelData.map(row => ({
                 adresse: row['Adresse'],
-                cave: row['CAVE'],
-                cavr: '', // Set this based on your data or leave empty
-                client: row['Nom du client'],
-                code_operation: '', // Set this based on your data or leave empty
-                codesisin: row['CodeSISIN'],
-                date_bourse: new Date(row['DateBourse']),
-                date_de_naissance: new Date(row['DateDeNaissance']),
+                cave: row['CAV'],
+                cavr: row['CAV'], 
+                client: row['Client'],
+                code_operation: row['C.OPE'], 
+                codesisin: row['ISIN'],
+                date_bourse: this.formatDate(row['Date dénouement']),
+                date_de_naissance: new Date(),
                 date_import: new Date(), // Assuming the import date is now
-                date_operation: new Date(), // Set this based on your data or leave empty
-                identifiant: row['Identifiant National'],
-                libelle: '', // Set this based on your data or leave empty
+                date_operation: this.formatDate(row['Date opération']), 
+                identifiant: row['Identifiant'],
+                libelle: row['L.OPE'], 
                 nationalite: row['Nationalité'],
-                nature_client: '', // Set this based on your data or leave empty
-                nature_compte: '', // Set this based on your data or leave empty
-                nature_comptee: '', // Set this based on your data or leave empty
-                nature_compter: '', // Set this based on your data or leave empty
-                nature_id: row['Nature de l’identification'],
-                num_contrat: '', // Set this based on your data or leave empty
-                quantite: 0, // Assuming quantity is not in your data
-                sens_comptable: 0, // Set this based on your data or leave empty
+                nature_client: '', 
+                nature_compte: '', 
+                nature_comptee: row['Sous compte'], 
+                nature_compter: row['Sous compte'], 
+                nature_id: row['Nat.Identifiant'],
+                num_contrat: row['Contract ID'], 
+                quantite: row['Quantité'], // Assuming quantity is not in your data
+                sens_comptable: '', 
                 solde: row['Solde'],
-                statut: '', // Set this based on your data or leave empty
-                tc: '', // Set this based on your data or leave empty
-                tce: '', // Set this based on your data or leave empty
-                tcr: '', // Set this based on your data or leave empty
+                statut: row['Statut'], 
+                tc: '', 
+                tce: row['livreur'], 
+                tcr: row['livré'], 
                 titre: this.selectedTitre,
-                treated: true, // Set this based on your data or leave empty
-                type_client: row['TYPEe'],
-                type_de_residence: row['TypeDeResidence'],
-                type_import: '', // Set this based on your data or leave empty
-                cav: 0, // Set this based on your data or leave empty
+                treated: true, 
+                type_client: row['TYPE'],
+                type_de_residence: '',
+                type_import: '', 
+                cav: '', 
                 emetteur: null // Assuming emetteur ID needs to be set separately
             }));
 
@@ -175,15 +188,27 @@ export class ImportComponent implements OnInit {
   onRadioOptionChange() {
     this.importForm.get('radioOption')?.valueChanges.subscribe(value => {
       this.selectedType = value;
+      console.log('Selected Type:', this.selectedType); // Ensure the selectedType is logged
     });
+  }  
+
+  formatDate(dateString: any): Date {
+    if (typeof dateString !== 'string') {
+        console.error('Invalid date string:', dateString);
+        return new Date(); // Return a default date or handle as needed
+    }
+
+    const parts = dateString.split('/');
+    if (parts.length !== 3) {
+        console.error('Date string format is incorrect:', dateString);
+        return new Date(); // Return a default date or handle as needed
+    }
+
+    const [day, month, year] = parts;
+    return new Date(`${year}-${month}-${day}`);
   }
 
-  ReadExcel(event: any){
-    if(this.selectedType === 'FGO')
-      this.ReadFGO(event);
-    else if(this.selectedType === 'FCRA')
-      this.ReadFCRA(event);
-  }
+  
   
 
 

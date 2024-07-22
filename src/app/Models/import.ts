@@ -21,7 +21,7 @@ export class Import {
     nature_id!: string;
     num_contrat!: string;
     quantite!: number;
-    sens_comptable!: number;
+    sens_comptable!: string;
     solde!: number;
     statut!: string;
     tc!: string;
@@ -32,7 +32,7 @@ export class Import {
     type_client!: string;
     type_de_residence!: string;
     type_import!: string;
-    cav!: number;
+    cav!: string;
     emetteur!: Emetteur | null;
   }
   

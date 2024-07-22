@@ -34,8 +34,12 @@ export class ImportService {
     return this.http.post<any>(`${this.baseUrl}/importfcra/${emetteurId}`, importData);
   }
 
-  saveImportData(importData: Import, emetteurId: string): Observable<any> {
+  saveImportDataFCRA(importData: Import, emetteurId: string): Observable<any> {
     return this.http.post<any>(`${this.baseUrl}/importfcra/${emetteurId}`, importData);
+  }
+
+  saveImportDataFGO(importData: Import, emetteurId: string): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/importfgo/${emetteurId}`, importData);
   }
 
 }

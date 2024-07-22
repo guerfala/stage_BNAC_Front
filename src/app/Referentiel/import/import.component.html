@@ -25,16 +25,23 @@
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
 
-    <div>
-      <input type="file" id="file" (change)="ReadExcel($event)" />
+    <div *ngIf="selectedType === 'FGO'">
+      <input type="file" id="fileFGO" (change)="ReadFGO($event)" />
+    </div>
+    
+    <!-- Show file input only if selectedType is FCRA -->
+    <div *ngIf="selectedType === 'FCRA'">
+      <input type="file" id="fileFCRA" (change)="ReadFCRA($event)" />
     </div>
 
-    <mat-radio-group formControlName="radioOption">
+    <mat-radio-group formControlName="radioOption" (change)="onRadioOptionChange()">
       <mat-radio-button value="FGO">FGO</mat-radio-button>
       <mat-radio-button value="FCRA">FCRA</mat-radio-button>
     </mat-radio-group>
 
     <br><br>
 
-    <button (click)="onSubmit()">Submit</button>  </form>
+    <button (click)="onSubmit()">Submit</button>  
+  
+  </form>
 </div>
