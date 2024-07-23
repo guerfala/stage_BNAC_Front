@@ -15,4 +15,8 @@ export class TitreService {
   getTitresByEmetteur(idEmetteur: string): Observable<Titre[]> {
     return this.httpClient.get<Titre[]>(`${this.baseURL}${idEmetteur}/titres`);
   }
+
+  getIsinByIdTitre(id: string): Observable<string> {
+    return this.httpClient.get(`${this.baseURL}getIsinByIdTitre/${id}`, { responseType: 'text' });
+  }
 }

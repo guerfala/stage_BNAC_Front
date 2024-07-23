@@ -20,6 +20,7 @@ export class ImportComponent implements OnInit {
   selectedTitre!: string;
   em!: Emetteur;
   selectedType!: string;
+  codeisin !: any;
 
   importForm: FormGroup;
   csvData: any[] = [];
@@ -55,28 +56,37 @@ export class ImportComponent implements OnInit {
 
   onTitreChange(event: any) {
     this.selectedTitre = event.value;
+    this.titreService.getIsinByIdTitre(this.selectedTitre).subscribe(data => {
+      this.codeisin = data;
+    });
   }
 
   onSubmit() {
-    if (this.selectedType == 'FGO')
+    if(this.imported[0].codesisin == this.codeisin)
     {
-      this.imported.forEach(element => {
-        this.importService.saveImportDataFGO(element, this.selectedEmetteur).subscribe(data => {
-          console.log(data);
-        }, error => {
-          console.error("Error importing data:", error);
-        });
-      });
+      if (this.selectedType == 'FGO')
+        {
+          this.imported.forEach(element => {
+            this.importService.saveImportDataFGO(element, this.selectedEmetteur).subscribe(data => {
+              console.log(data);
+            }, error => {
+              console.error("Error importing data:", error);
+            });
+          });
+        }
+        else if (this.selectedType == 'FCRA')
+        {
+          this.imported.forEach(element => {
+            this.importService.saveImportDataFCRA(element, this.selectedEmetteur).subscribe(data => {
+              console.log(data);
+            }, error => {
+              console.error("Error importing data:", error);
+            });
+          });
+        }
     }
-    else if (this.selectedType == 'FCRA')
-    {
-      this.imported.forEach(element => {
-        this.importService.saveImportDataFCRA(element, this.selectedEmetteur).subscribe(data => {
-          console.log(data);
-        }, error => {
-          console.error("Error importing data:", error);
-        });
-      });
+    else{
+      alert("Le fichier ne correspond pas au titre");
     }
   }
 

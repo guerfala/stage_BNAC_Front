@@ -25,6 +25,7 @@ import { JournalComponent } from './Historique/journal/journal.component';
 import { MouvementsComponent } from './Historique/mouvements/mouvements.component';
 import { ImportComponent } from './Referentiel/import/import.component';
 import { MatRadioModule } from '@angular/material/radio';
+import { TraitementComponent } from './Referentiel/traitement/traitement.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { MatRadioModule } from '@angular/material/radio';
     JournalComponent,
     MouvementsComponent,
     ImportComponent,
+    TraitementComponent,
   ],
   imports: [
     BrowserModule,
