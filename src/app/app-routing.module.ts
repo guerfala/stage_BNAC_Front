@@ -7,6 +7,7 @@ import { StructureCapitalComponent } from './Historique/structure-capital/struct
 import { JournalComponent } from './Historique/journal/journal.component';
 import { MouvementsComponent } from './Historique/mouvements/mouvements.component';
 import { ImportComponent } from './Referentiel/import/import.component';
+import { TraitementComponent } from './Referentiel/traitement/traitement.component';
 
 const routes: Routes = [
   {path: 'actionnaire', component: ActionnaireComponent},
@@ -16,6 +17,7 @@ const routes: Routes = [
   {path: 'journal', component: JournalComponent},
   {path: 'mouvements', component: MouvementsComponent},
   {path: 'import', component: ImportComponent},
+  {path: 'traitement', component: TraitementComponent},
 ];
 
 @NgModule({

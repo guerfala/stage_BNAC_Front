@@ -133,7 +133,7 @@ export class ImportComponent implements OnInit {
                   type_client: row['Type du client'],
                   type_de_residence: row['Type de résidence'],
                   type_import: '', 
-                  cav: row['Catégorie d\'avoir'], 
+                  cav: '0' + row['Catégorie d\'avoir'], 
                   emetteur: null // Assuming emetteur ID needs to be set separately
               }));
   
@@ -174,7 +174,7 @@ export class ImportComponent implements OnInit {
                 nature_id: row['Nat.Identifiant'],
                 num_contrat: row['Contract ID'], 
                 quantite: row['Quantité'], // Assuming quantity is not in your data
-                sens_comptable: '', 
+                sens_comptable: row['SENS'], 
                 solde: row['Solde'],
                 statut: row['Statut'], 
                 tc: '', 

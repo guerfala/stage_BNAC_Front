@@ -42,5 +42,21 @@ export class ImportService {
     return this.http.post<any>(`${this.baseUrl}/importfgo/${emetteurId}`, importData);
   }
 
+  getFGO(emetteurId: string, titreId: string): Observable<Import[]> {
+    return this.http.get<Import[]>(`${this.baseUrl}/getFGO/${emetteurId}/${titreId}`);
+  }
+
+  getFCRA(emetteurId: string, titreId: string): Observable<Import[]> {
+    return this.http.get<Import[]>(`${this.baseUrl}/getFCRA/${emetteurId}/${titreId}`);
+  }
+
+  traiterFCRA(emetteurId: string, titreId: string): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/traiterFCRA/${emetteurId}/${titreId}`, null);
+  }
+
+  traiterFGO(emetteurId: string, titreId: string): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/traiterFGO/${emetteurId}/${titreId}`, null);
+  }
+
 }
  
