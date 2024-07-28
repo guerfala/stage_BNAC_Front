@@ -53,6 +53,14 @@ export class TitreService {
         return []; // Return an empty array in case of error or no results found
       });
   }
+
+  getTitresByEmetteur(idEmetteur: string): Observable<Titre[]> {
+    return this.http.get<Titre[]>(`${this.baseUrl}${idEmetteur}/titres`);
+  }
+
+  getIsinByIdTitre(id: string): Observable<string> {
+    return this.http.get(`${this.baseUrl}getIsinByIdTitre/${id}`, { responseType: 'text' });
+  }
   }
 
 

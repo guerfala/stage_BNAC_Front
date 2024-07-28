@@ -26,4 +26,7 @@ export class NatureAvoirService {
   deleteNatureAvoir(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/deleteNatureAvoir/${id}`);
   }
+  getNatureAvoir(): Observable<NatureAvoir[]> {
+    return this.http.get<NatureAvoir[]>(`${this.baseUrl}getAllNatureAvoirs`);
+  }
 }

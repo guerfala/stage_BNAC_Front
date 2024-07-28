@@ -7,20 +7,24 @@ import { NatureAvoirComponent } from './Historique/nature-avoir/nature-avoir.com
 import { NatureCompteTitreComponent } from './Historique/nature-compte-titre/nature-compte-titre.component';
 import { TitreComponent } from './Historique/titre/titre.component';
 import { ImportComponent } from './Referentiel/import/import.component';
+import { MouvementNComponent } from './Referentiel/mouvement-n/mouvement-n.component';
 
-
-
+import { JournalComponent } from './Historique/journal/journal.component';
+import { MouvementsComponent } from './Historique/mouvements/mouvements.component';
 
 
 const routes: Routes = [
   {path: 'actionnaire', component: ActionnaireComponent},
- 
+
   { path: 'teneur-compte', component: TeneurCompteComponent },
   { path: 'nature-avoir', component: NatureAvoirComponent },
   { path: 'nature-compte-titre', component: NatureCompteTitreComponent },
   { path: 'titre', component: TitreComponent },
   {path:'import',component:ImportComponent},
+  {path:'mouvements-n',component: MouvementNComponent},
 
+  {path: 'journal', component: JournalComponent},
+  {path: 'mouvements', component: MouvementsComponent},
 
 
 

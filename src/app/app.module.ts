@@ -29,6 +29,16 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { ImportComponent } from './Referentiel/import/import.component';
 
+import { HttpClientModule } from '@angular/common/http';
+
+
+import { EtatActionnaireComponent } from './Historique/etat-actionnaire/etat-actionnaire.component';
+
+import { SoldeTCComponent } from './Historique/solde-tc/solde-tc.component';
+import { StructureCapitalComponent } from './Historique/structure-capital/structure-capital.component';
+import { JournalComponent } from './Historique/journal/journal.component';
+import { MouvementsComponent } from './Historique/mouvements/mouvements.component';
+import { TraitementComponent } from './Referentiel/traitement/traitement.component';
 
 
 
@@ -43,6 +53,13 @@ import { ImportComponent } from './Referentiel/import/import.component';
         NatureCompteTitreComponent,
         TitreComponent,
         ImportComponent,
+    EtatActionnaireComponent,
+    SoldeTCComponent,
+    StructureCapitalComponent,
+    JournalComponent,
+    MouvementsComponent,
+    TraitementComponent,
+
         
     ],
     bootstrap: [AppComponent], imports: [BrowserModule,
