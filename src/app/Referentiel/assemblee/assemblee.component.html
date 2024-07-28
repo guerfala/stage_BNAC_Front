@@ -1,0 +1,24 @@
+<form [formGroup]="assembleeForm" (ngSubmit)="onSubmit()">
+    <div>
+      <label for="libelle">Libelle:</label>
+      <input id="libelle" formControlName="libelle" type="text">
+    </div>
+    <div>
+      <label for="lieu">Lieu:</label>
+      <input id="lieu" formControlName="lieu" type="text">
+    </div>
+    <div>
+      <label for="dateTenue">Date Tenue:</label>
+      <input id="dateTenue" formControlName="dateTenue" type="datetime-local">
+    </div>
+    <div formGroupName="typeAssemblee">
+      <label for="idTypeAssemblee">Type Assemblee ID:</label>
+      <input id="idTypeAssemblee" formControlName="idTypeAssemblee" type="text">
+    </div>
+    <div formGroupName="emetteur">
+      <label for="idEmetteur">Emetteur ID:</label>
+      <input id="idEmetteur" formControlName="idEmetteur" type="text">
+    </div>
+    <button type="submit">{{ isEditMode ? 'Update' : 'Create' }}</button>
+  </form>
+  
