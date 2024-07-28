@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { NatureCompteTitre } from '../Models/nature-compte-titre';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -23,5 +25,8 @@ export class NatureCompteTitreService {
 
   deleteNatureCompteTitre(id: number) {
     return this.http.delete(`${this.apiUrl}/deleteNatureCompteTitre/${id}`);
+  }
+  getNatureCompte(): Observable<NatureCompteTitre[]> {
+    return this.http.get<NatureCompteTitre[]>(`${this.apiUrl}getAllNatureCompteTitres`);
   }
 }

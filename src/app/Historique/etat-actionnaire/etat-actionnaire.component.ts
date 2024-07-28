@@ -41,7 +41,7 @@ export class EtatActionnaireComponent implements OnInit {
     @ViewChild(MatPaginator) paginator!: MatPaginator;
     @ViewChild(MatSort) sort!: MatSort;
 
-    constructor(private emetteurService: EmetteurService, private titreService: TitreService, private actionnaireService: ActionnaireService, private natureCompteService: NatureCompteService, private natureAvoirService: NatureAvoirService, private teneurCompteService: TeneurCompteService, private pdfGeneratorService: PdfGeneratorService) { }
+    constructor(private emetteurService: EmetteurService, private titreService: TitreService, private actionnaireService: ActionnaireService, private natureCompteTitreService: NatureCompteTitreService, private natureAvoirService: NatureAvoirService, private teneurCompteService: TeneurCompteService, private pdfGeneratorService: PdfGeneratorService) { }
 
     ngOnInit(): void {
         this.getEmetteurs();
@@ -60,7 +60,7 @@ export class EtatActionnaireComponent implements OnInit {
     }
 
     getNatureCompte() {
-      this.natureCompteService.getNatureCompte().subscribe(data => {
+      this.natureCompteTitreService.getNatureCompte().subscribe(data => {
         this.natureCompte = data;
       });
     }
