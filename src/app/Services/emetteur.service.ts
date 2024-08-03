@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class EmetteurService {
 
-  private baseURL="http://localhost:8081/bnac/"
+  private baseURL="http://localhost:8081/bnac"
 
   constructor(private httpClient: HttpClient) { }
 

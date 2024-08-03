@@ -1,24 +1,92 @@
-<form [formGroup]="assembleeForm" (ngSubmit)="onSubmit()">
-    <div>
-      <label for="libelle">Libelle:</label>
-      <input id="libelle" formControlName="libelle" type="text">
-    </div>
-    <div>
-      <label for="lieu">Lieu:</label>
-      <input id="lieu" formControlName="lieu" type="text">
-    </div>
-    <div>
-      <label for="dateTenue">Date Tenue:</label>
-      <input id="dateTenue" formControlName="dateTenue" type="datetime-local">
-    </div>
-    <div formGroupName="typeAssemblee">
-      <label for="idTypeAssemblee">Type Assemblee ID:</label>
-      <input id="idTypeAssemblee" formControlName="idTypeAssemblee" type="text">
-    </div>
-    <div formGroupName="emetteur">
-      <label for="idEmetteur">Emetteur ID:</label>
-      <input id="idEmetteur" formControlName="idEmetteur" type="text">
-    </div>
-    <button type="submit">{{ isEditMode ? 'Update' : 'Create' }}</button>
-  </form>
+<div class="container">
+  <h2>Assemblee List</h2>
+
+  <table mat-table [dataSource]="filteredAssemblees" class="mat-elevation-z8">
+    <ng-container matColumnDef="emetteur">
+      <th mat-header-cell *matHeaderCellDef>Emetteur ID</th>
+      <td mat-cell *matCellDef="let element">{{ element.emetteur.idEmetteur }}</td>
+    </ng-container>
+    <ng-container matColumnDef="typeAssemblee">
+      <th mat-header-cell *matHeaderCellDef>Type Assemblee ID</th>
+      <td mat-cell *matCellDef="let element">{{ element.idtypeAssemblee }}</td>
+    </ng-container>
+    
+    <ng-container matColumnDef="dateTenue">
+      <th mat-header-cell *matHeaderCellDef>Date Tenue</th>
+      <td mat-cell *matCellDef="let element">{{ element.dateTenue | date: 'short' }}</td>
+    </ng-container>
+    <ng-container matColumnDef="lieu">
+      <th mat-header-cell *matHeaderCellDef>Lieu</th>
+      <td mat-cell *matCellDef="let element">{{ element.lieu }}</td>
+    </ng-container>
+    <ng-container matColumnDef="idAssemblee">
+      <th mat-header-cell *matHeaderCellDef>ID</th>
+      <td mat-cell *matCellDef="let element">{{ element.idAssemblee }}</td>
+     </ng-container>
+
+     <ng-container matColumnDef="libelle">
+      <th mat-header-cell *matHeaderCellDef>Libelle</th>
+      <td mat-cell *matCellDef="let element">{{ element.libelle }}</td>
+    </ng-container>
+   
+    
   
+   
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-icon-button color="primary" (click)="editAssemblee(element)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="deleteAssemblee(element.idAssemblee)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="7">No data matching the filter "{{ searchLibelle }}"</td>
+    </tr>
+  </table>
+
+  <h2>{{ isEditMode ? 'Edit' : 'Add' }} Assemblee</h2>
+  <form [formGroup]="assemblee" (ngSubmit)="onSubmit()">
+
+    <mat-form-field appearance="fill">
+      <mat-label>Emetteur</mat-label>
+      <mat-select formControlName="idEmetteur">
+        <mat-option *ngFor="let emetteur of emetteurs" [value]="emetteur">{{ emetteur }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Type d'Assemblée</mat-label>
+      <mat-select formControlName="idTypeAssemblee">
+        <mat-option *ngFor="let type of typeAssemblees" [value]="type">
+          {{ type }}  
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Date Tenue</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="dateTenue">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    
+    <mat-form-field appearance="fill">
+      <mat-label>Lieu</mat-label>
+      <input matInput type="text" formControlName="lieu">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Libelle</mat-label>
+      <input matInput type="text" formControlName="libelle">
+    </mat-form-field>
+      
+  
+    <button mat-raised-button color="primary" type="submit">{{ isEditMode ? 'Update' : 'Add' }}</button>
+  </form>
+</div>

@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { AppComponent } from './app.component';
 import { ActionnaireComponent } from './Historique/actionnaire/actionnaire.component';
@@ -39,7 +40,8 @@ import { StructureCapitalComponent } from './Historique/structure-capital/struct
 import { JournalComponent } from './Historique/journal/journal.component';
 import { MouvementsComponent } from './Historique/mouvements/mouvements.component';
 import { TraitementComponent } from './Referentiel/traitement/traitement.component';
-
+import { AssembleeComponent } from './Referentiel/assemblee/assemblee.component';
+import { PresentsComponent } from './Referentiel/presents/presents.component';
 
 
 @NgModule({ declarations: [
@@ -59,6 +61,8 @@ import { TraitementComponent } from './Referentiel/traitement/traitement.compone
     JournalComponent,
     MouvementsComponent,
     TraitementComponent,
+    AssembleeComponent,
+    PresentsComponent,
 
         
     ],
@@ -81,6 +85,7 @@ import { TraitementComponent } from './Referentiel/traitement/traitement.compone
         MatButtonModule,
         MatIconModule,
         AppRoutingModule,
+        MatDialogModule,
         MatDatepickerModule,
         MatNativeDateModule], providers: [
         provideAnimationsAsync(),

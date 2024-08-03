@@ -1,2 +1,6 @@
-export class TypeAssemblee {
-}
+
+export interface TypeAssemblee {
+    idTypeAssemblee: string;
+    libelle: string;
+  }
+  

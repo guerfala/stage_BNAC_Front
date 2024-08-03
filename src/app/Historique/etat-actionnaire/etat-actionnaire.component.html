@@ -11,7 +11,7 @@
           <mat-label>Emetteur</mat-label>
           <mat-select [(value)]="selectedEmetteur" (selectionChange)="onEmetteurChange($event)">
             <mat-option *ngFor="let emetteur of emetteurs" [value]="emetteur.idEmetteur">
-              {{emetteur.libelleCourt}}
+              {{emetteur.LibelleCourt}}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -19,8 +19,8 @@
         <mat-form-field>
           <mat-label>Titre</mat-label>
           <mat-select [(value)]="selectedTitre" (selectionChange)="onTitreChange($event)">
-            <mat-option *ngFor="let titre of titres" [value]="titre.idTitre">
-              {{titre.libelleCourt}}
+            <mat-option *ngFor="let titre of titres" [value]="titre.IdTitre">
+              {{titre.LibelleCourt}}
             </mat-option>
           </mat-select>
         </mat-form-field>

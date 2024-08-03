@@ -16,20 +16,20 @@
     </mat-select>
   </mat-form-field>
   
-  <mat-form-field>
+  <mat-form-field appearance="fill">
     <mat-label>From</mat-label>
-    <input matInput [matDatepicker]="picker" [(ngModel)]="minDate">
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
+    <input matInput [matDatepicker]="startPicker" [(ngModel)]="minDate">
+    <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+    <mat-datepicker #startPicker></mat-datepicker>
   </mat-form-field>
-
-  <mat-form-field>
+  
+  <mat-form-field appearance="fill">
     <mat-label>To</mat-label>
-    <input matInput [matDatepicker]="picker" [(ngModel)]="maxDate">
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
+    <input matInput [matDatepicker]="endPicker" [(ngModel)]="maxDate">
+    <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+    <mat-datepicker #endPicker></mat-datepicker>
   </mat-form-field>
-
+  
   <mat-form-field>
     <mat-label>TC</mat-label>
     <mat-select [(value)]="selectedTC" (selectionChange)="onTCChange($event)">
