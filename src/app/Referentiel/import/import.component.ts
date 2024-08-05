@@ -155,8 +155,8 @@ export class ImportComponent implements OnInit {
 
             this.imported = excelData.map(row => ({
                 adresse: row['Adresse'],
-                cave: row['CAV'],
-                cavr: row['CAV'], 
+                cave: '0' + row['CAV'],
+                cavr: '0' + row['CAV'], 
                 client: row['Client'],
                 code_operation: row['C.OPE'], 
                 codesisin: row['ISIN'],
