@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Emetteur } from '../Models/emetteur';
 import { Observable } from 'rxjs';
@@ -18,5 +18,15 @@ export class EmetteurService {
 
   getAllEmetteurLibelleCourt(): Observable<string[]> {
     return this.httpClient.get<string[]>(`${this.baseURL}/libelleCourt`);
+  }
+
+getAllEmetteurs(query: string): Observable<Emetteur[]> {
+  const url = `http://localhost:8081/bnac/emetteurs/search?query=${encodeURIComponent(query)}`;
+  return this.httpClient.get<Emetteur[]>(url);
+}
+
+
+  searchEmetteurs(query: string): Observable<Emetteur[]> {
+    return this.getAllEmetteurs(query);
   }
 }

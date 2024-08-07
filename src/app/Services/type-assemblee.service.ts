@@ -7,11 +7,13 @@ import { TypeAssemblee } from '../Models/type-assemblee';
   providedIn: 'root'
 })
 export class TypeAssembleeService {
-  private baseURL = 'http://localhost:8081/bnac'; // Ensure this URL is correct
+
+  private baseUrl = 'http://localhost:8081/bnac';
 
   constructor(private http: HttpClient) { }
 
   getAllTypeAssemblees(): Observable<TypeAssemblee[]> {
-    return this.http.get<TypeAssemblee[]>(`${this.baseURL}/getAllTypeAssemblees`);
+    return this.http.get<TypeAssemblee[]>(`${this.baseUrl}/getAllTypeAssemblees`);
   }
+
 }

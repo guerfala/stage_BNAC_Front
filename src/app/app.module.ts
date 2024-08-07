@@ -8,6 +8,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 
 import { AppComponent } from './app.component';
 import { ActionnaireComponent } from './Historique/actionnaire/actionnaire.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTableModule } from '@angular/material/table';
@@ -42,6 +43,7 @@ import { MouvementsComponent } from './Historique/mouvements/mouvements.componen
 import { TraitementComponent } from './Referentiel/traitement/traitement.component';
 import { AssembleeComponent } from './Referentiel/assemblee/assemblee.component';
 import { PresentsComponent } from './Referentiel/presents/presents.component';
+import { AutoSuggestionComponent } from './Referentiel/auto-suggestion/auto-suggestion.component';
 
 
 @NgModule({ declarations: [
@@ -63,6 +65,7 @@ import { PresentsComponent } from './Referentiel/presents/presents.component';
     TraitementComponent,
     AssembleeComponent,
     PresentsComponent,
+    AutoSuggestionComponent,
 
         
     ],
@@ -86,6 +89,8 @@ import { PresentsComponent } from './Referentiel/presents/presents.component';
         MatIconModule,
         AppRoutingModule,
         MatDialogModule,
+        MatAutocompleteModule,
+
         MatDatepickerModule,
         MatNativeDateModule], providers: [
         provideAnimationsAsync(),

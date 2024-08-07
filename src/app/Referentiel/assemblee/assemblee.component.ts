@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { AssembleeService } from '../../Services/assemblee.service';
 import { EmetteurService } from '../../Services/emetteur.service';
-import { Assemblee } from '../../Models/assemblee';
-import { TypeAssemblee } from '../../Models/type-assemblee';  
-import { ConfirmationDialogComponent } from '../../confirmation-dialog/confirmation-dialog.component';
 import { TypeAssembleeService } from '../../Services/type-assemblee.service';
+import { Assemblee } from '../../Models/assemblee';
+import { Emetteur } from '../../Models/emetteur';
+import { TypeAssemblee } from '../../Models/type-assemblee';
+import { Observable, of } from 'rxjs';
+import { map, startWith, switchMap, debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-assemblee',
@@ -15,128 +15,125 @@ import { TypeAssembleeService } from '../../Services/type-assemblee.service';
   styleUrls: ['./assemblee.component.css']
 })
 export class AssembleeComponent implements OnInit {
-  typeAssemblees: TypeAssemblee[] = [];
-
-  assemblee: FormGroup;
-  isEditMode: boolean = false;
-  assembleeId: number | undefined;
+  assembleeForm: FormGroup;
   assemblees: Assemblee[] = [];
-  emetteurs: string[] = [];
-  filteredAssemblees: Assemblee[] = [];
-  searchLibelle = '';
+  emetteurs: Emetteur[] = [];
+  typeAssemblees: TypeAssemblee[] = [];
+  filteredEmetteurs$: Observable<Emetteur[]> = of([]);
 
-  displayedColumns: string[] = ['idAssemblee', 'emetteur','typeAssemblee','dateTenue','lieu', 'libelle',  'actions'];
+  isEdit = false;
+  currentAssembleeId?: number;
+
+  emetteurCtrl = new FormControl('');
+  displayedColumns: string[] = ['typeAssemblee', 'emetteur', 'dateTenue', 'lieu', 'libelle', 'actions'];
 
   constructor(
     private fb: FormBuilder,
     private assembleeService: AssembleeService,
     private emetteurService: EmetteurService,
-    private router: Router,
-    private route: ActivatedRoute,
-    public dialog: MatDialog,
     private typeAssembleeService: TypeAssembleeService
-
   ) {
-    this.assemblee = this.fb.group({
-      libelle: ['', Validators.required],
-      lieu: ['', Validators.required],
-      dateTenue: ['', Validators.required],
-      idTypeAssemblee: ['', Validators.required],
-      idEmetteur: ['', Validators.required]
+    this.assembleeForm = this.fb.group({
+      typeAssemblee: [''],
+      emetteur: [''],
+      dateTenue: [''],
+      lieu: [''],
+      libelle: ['']
     });
   }
 
   ngOnInit(): void {
     this.loadAssemblees();
-    this.loadEmetteurs();
+    this.loadEmetteurs(); 
     this.loadTypeAssemblees();
-    this.route.paramMap.subscribe(params => {
-      const id = params.get('id');
-      if (id) {
-        this.isEditMode = true;
-        this.assembleeId = +id;
-        this.assembleeService.getAssembleeById(this.assembleeId).subscribe(data => {
-          this.assemblee.patchValue(data);
-        });
-      }
-    });
+    this.setupEmetteurAutoSuggestion();
   }
 
   loadAssemblees(): void {
-    this.assembleeService.getAllAssemblees().subscribe(data => {
-      this.assemblees = data;
-      this.filteredAssemblees = [...this.assemblees];
-    }, error => {
-      console.error('Error loading Assemblees:', error);
-    });
-  }
-
-  loadEmetteurs(): void {
-    this.emetteurService.getAllEmetteurLibelleCourt().subscribe(data => {
-      this.emetteurs = data;
-    }, error => {
-      console.error('Error loading Emetteurs:', error);
-    });
+    this.assembleeService.getAllAssemblees().subscribe(
+      data => this.assemblees = data,
+      error => console.error('Error loading assemblees', error)
+    );
   }
 
   loadTypeAssemblees(): void {
     this.typeAssembleeService.getAllTypeAssemblees().subscribe(
-      data => {
-        console.log('TypeAssemblees:', data); // Debug output
-        this.typeAssemblees = data;
-      },
-      error => {
-        console.error('Error loading TypeAssemblees:', error);
-      }
+      data => this.typeAssemblees = data,
+      error => console.error('Error loading type assemblees', error)
     );
   }
 
-  onSubmit(): void {
-    if (this.assemblee.invalid) {
-      return;
-    }
+  setupEmetteurAutoSuggestion(): void {
+    this.filteredEmetteurs$ = this.emetteurCtrl.valueChanges.pipe(
+      startWith(''),
+      debounceTime(300),
+      switchMap(value => this.emetteurService.searchEmetteurs(value || '')),
+      map(emetteurs => emetteurs || [])
+    );
+  }
+    
 
-    if (this.isEditMode && this.assembleeId !== undefined) {
-      this.assembleeService.updateAssemblee(this.assembleeId, this.assemblee.value).subscribe(() => {
-        this.router.navigate(['/assemblees']);
+  saveAssemblee(): void {
+    if (this.assembleeForm.valid) {
+      const assemblee: Assemblee = this.assembleeForm.value;
+      console.log('Assemblee payload:', assemblee);  // Log the payload
+  
+      if (this.isEdit && this.currentAssembleeId !== undefined) {
+        this.assembleeService.updateAssemblee(this.currentAssembleeId, assemblee).subscribe(() => {
+          this.loadAssemblees();
+          this.isEdit = false;
+          this.assembleeForm.reset();
+        });
+      } else {
+        this.assembleeService.createAssemblee(assemblee).subscribe(() => {
+          this.loadAssemblees();
+          this.assembleeForm.reset();
+        });
+      }
+    }
+  }
+  
+  
+  editAssemblee(assemblee: Assemblee): void {
+    this.isEdit = true;
+    this.currentAssembleeId = assemblee.idAssemblee;
+    this.assembleeForm.patchValue(assemblee);
+  }
+
+  deleteAssemblee(id: number | undefined): void {
+    if (id !== undefined) {
+      this.assembleeService.deleteAssemblee(id).subscribe(() => {
+        this.loadAssemblees();
+      }, error => {
+        console.error('Error deleting assemblee', error);
       });
     } else {
-      this.assembleeService.createAssemblee(this.assemblee.value).subscribe(() => {
-        this.router.navigate(['/assemblees']);
-      });
+      console.error("idAssemblee is undefined, cannot delete.");
     }
   }
 
-  editAssemblee(selectedAssemblee: Assemblee): void {
-    this.assemblee.patchValue(selectedAssemblee);
-    this.isEditMode = true;
-    this.assembleeId = selectedAssemblee.idAssemblee !== undefined ? selectedAssemblee.idAssemblee : 0;
+  selectEmetteur(emetteur: Emetteur): void {
+    this.assembleeForm.patchValue({
+      emetteur: emetteur.idEmetteur  // Ensure this is the correct value to bind
+    });
+    this.emetteurCtrl.setValue(emetteur.LibelleCourt);  // Update the input field with the selected value
   }
-
-  deleteAssemblee(id: number): void {
-    this.assembleeService.deleteAssemblee(id).subscribe(() => {
-      this.loadAssemblees();
+    
+  loadEmetteurs(query: string = ''): void {
+    this.emetteurService.getAllEmetteurs(query).subscribe(data => {
+      console.log('Emetteurs:', data);  // Check the logged data
+      this.emetteurs = data;           // Assign data to the component property
+      this.setupEmetteurAutoSuggestion();
     }, error => {
-      console.error('Error deleting Assemblee:', error);
+      console.error('Error loading emetteurs:', error);
     });
   }
-
-  confirmDelete(id: number): void {
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
-      width: '250px',
-      data: { message: 'Are you sure you want to delete this assemblee?' }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === true) {
-        this.deleteAssemblee(id);
-      }
-    });
+  
+    toQueryString(params: any): string {
+    return Object.keys(params)
+      .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
+      .join('&');
   }
-
-  filterAssemblees(): void {
-    this.filteredAssemblees = this.assemblees.filter(assemblee =>
-      assemblee.libelle.toLowerCase().includes(this.searchLibelle.toLowerCase())
-    );
+  
+  
   }
-}
