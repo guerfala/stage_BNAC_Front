@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { EmetteurService } from '../../Services/emetteur.service';
 import { debounceTime, switchMap } from 'rxjs/operators';
@@ -10,6 +10,7 @@ import { Emetteur } from '../../Models/emetteur';
   styleUrls: ['./auto-suggestion.component.css']
 })
 export class AutoSuggestionComponent implements OnInit {
+  @Output() emetteurSelected = new EventEmitter<Emetteur>();
   emetteurCtrl = new FormControl();
   filteredEmetteurs: Emetteur[] = [];
 
@@ -22,5 +23,9 @@ export class AutoSuggestionComponent implements OnInit {
     ).subscribe(data => {
       this.filteredEmetteurs = data;
     });
+  }
+
+  selectEmetteur(emetteur: Emetteur): void {
+    this.emetteurSelected.emit(emetteur);
   }
 }

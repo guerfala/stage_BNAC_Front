@@ -1,7 +1,7 @@
 <div>
   <input [formControl]="emetteurCtrl" placeholder="Search Emetteur">
   <ul *ngIf="filteredEmetteurs.length > 0">
-    <li *ngFor="let emetteur of filteredEmetteurs">
+    <li *ngFor="let emetteur of filteredEmetteurs" (click)="selectEmetteur(emetteur)">
       {{ emetteur.LibelleCourt }}
     </li>
   </ul>
