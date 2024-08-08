@@ -7,7 +7,8 @@ import { Assemblee } from '../../Models/assemblee';
 import { Emetteur } from '../../Models/emetteur';
 import { TypeAssemblee } from '../../Models/type-assemblee';
 import { Observable, of } from 'rxjs';
-import { map, startWith, switchMap, debounceTime } from 'rxjs/operators';
+import { startWith, switchMap } from 'rxjs/operators';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-assemblee',
@@ -20,18 +21,18 @@ export class AssembleeComponent implements OnInit {
   emetteurs: Emetteur[] = [];
   typeAssemblees: TypeAssemblee[] = [];
   filteredEmetteurs$: Observable<Emetteur[]> = of([]);
+  emetteurCtrl = new FormControl();
 
   isEdit = false;
   currentAssembleeId?: number;
-
-  emetteurCtrl = new FormControl('');
   displayedColumns: string[] = ['typeAssemblee', 'emetteur', 'dateTenue', 'lieu', 'libelle', 'actions'];
 
   constructor(
     private fb: FormBuilder,
     private assembleeService: AssembleeService,
     private emetteurService: EmetteurService,
-    private typeAssembleeService: TypeAssembleeService
+    private typeAssembleeService: TypeAssembleeService,
+    private cdRef: ChangeDetectorRef
   ) {
     this.assembleeForm = this.fb.group({
       typeAssemblee: [''],
@@ -44,7 +45,6 @@ export class AssembleeComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadAssemblees();
-    this.loadEmetteurs(); 
     this.loadTypeAssemblees();
     this.setupEmetteurAutoSuggestion();
   }
@@ -66,18 +66,26 @@ export class AssembleeComponent implements OnInit {
   setupEmetteurAutoSuggestion(): void {
     this.filteredEmetteurs$ = this.emetteurCtrl.valueChanges.pipe(
       startWith(''),
-      debounceTime(300),
-      switchMap(value => this.emetteurService.searchEmetteurs(value || '')),
-      map(emetteurs => emetteurs || [])
+      switchMap(query => this.emetteurService.getAllEmetteurs(query))
     );
   }
-    
+
+  selectEmetteur(emetteur: Emetteur): void {
+    console.log('Selected Emetteur:', emetteur);
+    this.assembleeForm.patchValue({
+      emetteur: emetteur.idEmetteur
+    });
+  }
+
+  displayEmetteur(emetteur: Emetteur): string {
+    return emetteur ? emetteur.LibelleCourt : '';
+  }
 
   saveAssemblee(): void {
     if (this.assembleeForm.valid) {
       const assemblee: Assemblee = this.assembleeForm.value;
-      console.log('Assemblee payload:', assemblee);  // Log the payload
-  
+      console.log('Assemblee payload:', assemblee);
+
       if (this.isEdit && this.currentAssembleeId !== undefined) {
         this.assembleeService.updateAssemblee(this.currentAssembleeId, assemblee).subscribe(() => {
           this.loadAssemblees();
@@ -92,48 +100,16 @@ export class AssembleeComponent implements OnInit {
       }
     }
   }
-  
-  
+
   editAssemblee(assemblee: Assemblee): void {
     this.isEdit = true;
     this.currentAssembleeId = assemblee.idAssemblee;
     this.assembleeForm.patchValue(assemblee);
   }
 
-  deleteAssemblee(id: number | undefined): void {
-    if (id !== undefined) {
-      this.assembleeService.deleteAssemblee(id).subscribe(() => {
-        this.loadAssemblees();
-      }, error => {
-        console.error('Error deleting assemblee', error);
-      });
-    } else {
-      console.error("idAssemblee is undefined, cannot delete.");
-    }
-  }
-
-  selectEmetteur(emetteur: Emetteur): void {
-    this.assembleeForm.patchValue({
-      emetteur: emetteur.idEmetteur  // Ensure this is the correct value to bind
-    });
-    this.emetteurCtrl.setValue(emetteur.LibelleCourt);  // Update the input field with the selected value
-  }
-    
-  loadEmetteurs(query: string = ''): void {
-    this.emetteurService.getAllEmetteurs(query).subscribe(data => {
-      console.log('Emetteurs:', data);  // Check the logged data
-      this.emetteurs = data;           // Assign data to the component property
-      this.setupEmetteurAutoSuggestion();
-    }, error => {
-      console.error('Error loading emetteurs:', error);
+  deleteAssemblee(id: number): void {
+    this.assembleeService.deleteAssemblee(id).subscribe(() => {
+      this.loadAssemblees();
     });
   }
-  
-    toQueryString(params: any): string {
-    return Object.keys(params)
-      .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
-      .join('&');
-  }
-  
-  
-  }
+}
