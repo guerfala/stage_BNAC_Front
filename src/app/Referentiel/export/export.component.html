@@ -1,0 +1,129 @@
+<mat-form-field>
+    <mat-label>Emetteur</mat-label>
+    <mat-select [(value)]="selectedEmetteur" (selectionChange)="onEmetteurChange($event)">
+        <mat-option *ngFor="let emetteur of emetteurs" [value]="emetteur.idEmetteur">
+            {{emetteur.libelleCourt}}
+        </mat-option>
+    </mat-select>
+</mat-form-field>
+
+<mat-form-field>
+    <mat-label>Titre</mat-label>
+    <mat-select [(value)]="selectedTitre" (selectionChange)="onTitreChange($event)">
+        <mat-option *ngFor="let titre of titres" [value]="titre.idTitre">
+            {{titre.libelleCourt}}
+        </mat-option>
+    </mat-select>
+</mat-form-field>
+
+<mat-form-field>
+    <mat-label>From</mat-label>
+    <input matInput [matDatepicker]="pickerFrom" [(ngModel)]="minDate">
+    <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+    <mat-datepicker #pickerFrom></mat-datepicker>
+  </mat-form-field>
+  
+  <mat-form-field>
+    <mat-label>To</mat-label>
+    <input matInput [matDatepicker]="pickerTo" [(ngModel)]="maxDate">
+    <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+    <mat-datepicker #pickerTo></mat-datepicker>
+  </mat-form-field>
+
+<mat-radio-group [(ngModel)]="selectedRadioOption">
+    <mat-radio-button value="FGO">FGO</mat-radio-button>
+    <mat-radio-button value="FCRA">FCRA</mat-radio-button>
+</mat-radio-group>
+
+<button (click)="Export()">Export</button>
+
+<div class="mat-elevation-z8" *ngIf="selectedRadioOption === 'FGO'">
+    <table mat-table [dataSource]="dataSource" matSort>
+        <ng-container matColumnDef="CodeBIC">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Adresse </th>
+            <td mat-cell *matCellDef="let row"> {{row.CodeBIC}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="CodeParticipant">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> CodeParticipant </th>
+            <td mat-cell *matCellDef="let row"> {{row.CodeParticipant}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="NatureProp">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> NatureProp </th>
+            <td mat-cell *matCellDef="let row"> {{row.NatureProp}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Nom">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Nom </th>
+            <td mat-cell *matCellDef="let row"> {{row.nom}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Prenom">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Prenom </th>
+            <td mat-cell *matCellDef="let row"> {{row.Prenom}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="NomArabe">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> NomArabe </th>
+            <td mat-cell *matCellDef="let row"> {{row.NomArabe}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="CodeNaturePiece">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> CodeNaturePiece </th>
+            <td mat-cell *matCellDef="let row"> {{row.CodeNaturePiece}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="NumPiece">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> NumPiece </th>
+            <td mat-cell *matCellDef="let row"> {{row.NumPiece}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="DateNaissance">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> DateNaissance </th>
+            <td mat-cell *matCellDef="let row"> {{row.DateNaissance}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="CategorieInves">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> CategorieInves </th>
+            <td mat-cell *matCellDef="let row"> {{row.CategorieInves}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Secteur">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Secteur </th>
+            <td mat-cell *matCellDef="let row"> {{row.Secteur}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Nationalite">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Nationalite </th>
+            <td mat-cell *matCellDef="let row"> {{row.Nationalite}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Resident">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Resident </th>
+            <td mat-cell *matCellDef="let row"> {{row.Resident}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Adresse">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Adresse </th>
+            <td mat-cell *matCellDef="let row"> {{row.Adresse}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="RefOp">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> RefOp </th>
+            <td mat-cell *matCellDef="let row"> {{row.RefOp}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="DateOp">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> DateOp </th>
+            <td mat-cell *matCellDef="let row"> {{row.DateOp}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsFGO"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsFGO;"></tr>
+
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+</div>
+

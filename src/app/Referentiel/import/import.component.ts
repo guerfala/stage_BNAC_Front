@@ -64,6 +64,26 @@ export class ImportComponent implements OnInit {
   onSubmit() {
     if(this.imported[0].codesisin == this.codeisin)
     {
+
+      /*const batchSize = 10000; // Adjust batch size as needed
+      const totalBatches = Math.ceil(this.imported.length / batchSize);
+      
+      for (let i = 0; i < totalBatches; i++) {
+        const batch = this.imported.slice(i * batchSize, (i + 1) * batchSize);
+        if (this.selectedType === 'FGO') {
+          this.importService.saveFCRA(batch, this.selectedEmetteur).subscribe(
+            data => { console.log(data); },
+            error => { console.error('Error importing data:', error); }
+          );
+        } else if (this.selectedType === 'FCRA') {
+          this.importService.saveFCRA(batch, this.selectedEmetteur).subscribe(
+            data => { console.log(data); },
+            error => { console.error('Error importing data:', error); }
+          );
+        }
+      }*/
+
+
       if (this.selectedType == 'FGO')
         {
           this.imported.forEach(element => {
@@ -132,7 +152,7 @@ export class ImportComponent implements OnInit {
                   treated: true, 
                   type_client: row['Type du client'],
                   type_de_residence: row['Type de résidence'],
-                  type_import: '', 
+                  type_import: "FCRA", 
                   cav: '0' + row['Catégorie d\'avoir'], 
                   emetteur: null // Assuming emetteur ID needs to be set separately
               }));
@@ -167,7 +187,7 @@ export class ImportComponent implements OnInit {
                 identifiant: row['Identifiant'],
                 libelle: row['L.OPE'], 
                 nationalite: row['Nationalité'],
-                nature_client: '', 
+                nature_client: row['TYPE'], 
                 nature_compte: '', 
                 nature_comptee: row['Sous compte'], 
                 nature_compter: row['Sous compte'], 
@@ -184,7 +204,7 @@ export class ImportComponent implements OnInit {
                 treated: true, 
                 type_client: row['TYPE'],
                 type_de_residence: '',
-                type_import: '', 
+                type_import: "FGO", 
                 cav: '', 
                 emetteur: null // Assuming emetteur ID needs to be set separately
             }));

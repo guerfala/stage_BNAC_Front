@@ -26,6 +26,7 @@ import { MouvementsComponent } from './Historique/mouvements/mouvements.componen
 import { ImportComponent } from './Referentiel/import/import.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { TraitementComponent } from './Referentiel/traitement/traitement.component';
+import { ExportComponent } from './Referentiel/export/export.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { TraitementComponent } from './Referentiel/traitement/traitement.compone
     MouvementsComponent,
     ImportComponent,
     TraitementComponent,
+    ExportComponent,
   ],
   imports: [
     BrowserModule,

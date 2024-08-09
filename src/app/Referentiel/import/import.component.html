@@ -1,5 +1,4 @@
 <div class="container mat-elevation-z8">
-  <form [formGroup]="importForm">
     <mat-form-field>
       <mat-label>Emetteur</mat-label>
       <mat-select [(value)]="selectedEmetteur" (selectionChange)="onEmetteurChange($event)">
@@ -20,7 +19,7 @@
 
     <mat-form-field>
       <mat-label>Date</mat-label>
-      <input matInput [matDatepicker]="picker" formControlName="date" required>
+      <input matInput [matDatepicker]="picker" required>
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
@@ -34,14 +33,13 @@
       <input type="file" id="fileFCRA" (change)="ReadFCRA($event)" />
     </div>
 
-    <mat-radio-group formControlName="radioOption" (change)="onRadioOptionChange()">
+    <mat-radio-group [(ngModel)]="selectedType">
       <mat-radio-button value="FGO">FGO</mat-radio-button>
       <mat-radio-button value="FCRA">FCRA</mat-radio-button>
-    </mat-radio-group>
+  </mat-radio-group>
 
     <br><br>
 
     <button (click)="onSubmit()">Submit</button>  
   
-  </form>
 </div>
