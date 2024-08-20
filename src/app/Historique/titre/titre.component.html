@@ -84,6 +84,7 @@
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
+  <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
 
   <h2>{{ isEdit ? 'Edit' : 'Add' }} Titre</h2>
   <form #titreForm="ngForm" (ngSubmit)="isEdit ? updateTitre(titreForm) : addTitre(titreForm)">

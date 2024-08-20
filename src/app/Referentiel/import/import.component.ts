@@ -57,10 +57,9 @@ export class ImportComponent implements OnInit {
   onSubmit() {
     const emetteur = this.importForm.value.emetteur;
     const titre = this.importForm.value.titre;
-    console.log('Selected Emetteur:', emetteur);
+    console.log('Selected Emetteur:', emetteur); //juste pour le debug :) !
     console.log('Selected Titre:', titre);
     const importData = this.csvData.map(row => ({
-
       Adresse: row['Adresse'],
      CAV:["Catégorie d'avoir"],
       CAVR:'',

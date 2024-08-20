@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Titre } from '../../Models/titre';
 import { TitreService } from '../../Services/titre.service';
 import { NgForm } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-titre',
@@ -23,6 +24,8 @@ export class TitreComponent implements OnInit {
   ];
   searchTerm = '';
 
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
   constructor(private titreService: TitreService, private fb: FormBuilder) {
     this.searchForm = this.fb.group({
       libelleLong: [''],
@@ -34,11 +37,15 @@ export class TitreComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAllTitres();
-
     this.searchForm.valueChanges.subscribe(value => {
       this.applyFilter();
     });
   }
+
+  ngAfterViewInit(): void {
+    this.filteredTitres.paginator = this.paginator;
+  }
+
   initializeTitre(): Titre {
     return {
       IdTitre: '',
@@ -55,7 +62,7 @@ export class TitreComponent implements OnInit {
       IdEmetteur:''
     };
   }
- 
+
   performSearch(): void {
     this.applyFilter();
   }
@@ -65,11 +72,11 @@ export class TitreComponent implements OnInit {
     this.filteredTitres.data = this.titres;
   }
 
-
   getAllTitres(): void {
     this.titreService.getAllTitres().subscribe(
       (data: Titre[]) => {
         this.titres = data; 
+        this.filteredTitres.data = this.titres;
         console.log('Titres récupérés : ', this.titres);
       },
       error => {
@@ -92,21 +99,12 @@ export class TitreComponent implements OnInit {
     );
   }
 
-
-  editTitre(titre:  Titre) {
+  editTitre(titre: Titre) {
     this.titre = { ...titre };
     this.isEdit = true;
   }
 
- /* updateTitre(): void {
-    this.titreService.updateTitre(this.titre.IdTitre, this.titre).subscribe(() => {
-      this.getAllTitres();
-      this.isEdit = false;
-      this.titre = this.initializeTitre();
-    });
-  }*/
-
-  updateTitre(form:NgForm):void {
+  updateTitre(form: NgForm): void {
     this.titreService.updateTitre(this.titre.IdTitre, this.titre).subscribe(
       (data: any) => {
         const index = this.titres.findIndex(item => item.IdTitre === data.IdTitre);
@@ -116,7 +114,6 @@ export class TitreComponent implements OnInit {
         this.getAllTitres();
         this.clearForm();
         form.resetForm();
-       
       },
       error => {
         console.log('Error updating titre: ', error);
@@ -125,7 +122,7 @@ export class TitreComponent implements OnInit {
   }
 
   clearForm(): void {
-    this.titre = this. initializeTitre();
+    this.titre = this.initializeTitre();
     this.isEdit = false;
   }
 
@@ -135,28 +132,27 @@ export class TitreComponent implements OnInit {
     });
   }
 
- /* onEmetteurIdChange(event: Event): void {
-    const inputElement = event.target as HTMLInputElement;
-    if (!this.titre.emetteur) {
-      this.titre.emetteur = { IdEmetteur: inputElement.value };
-    } else {
-      this.titre.emetteur.IdEmetteur = inputElement.value;
+  applyFilter(): void {
+    const filterValue = this.searchTerm.toLowerCase().trim();
+  
+    this.filteredTitres.data = this.titres.filter(titre => {
+      const libelleLong = titre.LibelleLong ? titre.LibelleLong.toLowerCase() : '';
+      const libelleCourt = titre.LibelleCourt ? titre.LibelleCourt.toLowerCase() : '';
+      const idTitre = titre.IdTitre ? titre.IdTitre.toLowerCase() : '';
+      const idEmetteur = titre.IdEmetteur ? titre.IdEmetteur.toLowerCase() : '';
+  
+      return (
+        libelleLong.includes(filterValue) ||
+        libelleCourt.includes(filterValue) ||
+        idTitre.includes(filterValue) ||
+        idEmetteur.includes(filterValue)
+      );
+    });
+  
+    // Reset pagination to the first page after filtering
+    if (this.filteredTitres.paginator) {
+      this.filteredTitres.paginator.firstPage();
     }
-  }*/
-    applyFilter(): void {
-      const filterValue = this.searchTerm.toLowerCase();
-      if (filterValue.length === 0) {
-        this.getAllTitres(); // Reset to show all when filter is empty
-      } else {
-        this.titres = this.titres.filter(titre =>
-          titre.LibelleLong.toLowerCase().startsWith(filterValue) ||
-          titre.LibelleCourt.toLowerCase().startsWith(filterValue) ||
-          titre.IdTitre.toLowerCase().startsWith(filterValue) ||
-          titre.IdEmetteur.toLowerCase().startsWith(filterValue)
-        );
-      }
-    }
-
-
   }
-
+  
+}

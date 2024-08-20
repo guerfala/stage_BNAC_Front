@@ -1,58 +1,52 @@
-<div>
-    <form [formGroup]="presentsForm" (ngSubmit)="onSubmit()">
-      <input formControlName="matricule" placeholder="Matricule" />
-      <input formControlName="emetteur" placeholder="Emetteur" />
-      <input formControlName="typeAssemblee" placeholder="TypeAssemblee" />
-      <input formControlName="solde" placeholder="Solde" />
-      <input formControlName="typePresence" placeholder="Type Presence" />
-      <button type="submit">{{ isEditMode ? 'Update' : 'Add' }} Presents</button>
-      <button type="button" (click)="cancelEdit()" *ngIf="isEditMode">Cancel</button>
+<div class="presents-container">
+  <h2>Presents</h2>
+
+  <div class="presents-list">
+    <ul>
+      <li *ngFor="let present of presents">
+        <div class="present-item">
+          <p><strong>Id Present:</strong> {{ present.IdPresent }}</p>
+          <p><strong>Id Emetteur:</strong> {{ present.idEmetteur }}</p>
+          <p><strong>Id Type Assemblee:</strong> {{ present.IdTypeAssemblee }}</p>
+          <p><strong>Matricule:</strong> {{ present.Matricule }}</p>
+          <p><strong>Date Tenue:</strong> {{ present.dateTenue | date }}</p>
+          <button (click)="onSelectPresent(present)">Select</button>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="present-details" *ngIf="selectedPresent">
+    <h3>Present Details</h3>
+    <p><strong>Id Present:</strong> {{ selectedPresent.IdPresent}}</p>
+    <p><strong>Id Emetteur:</strong> {{ selectedPresent.idEmetteur }}</p>
+    <p><strong>Id Type Assemblee:</strong> {{ selectedPresent.IdTypeAssemblee }}</p>
+    <p><strong>Matricule:</strong> {{ selectedPresent.Matricule }}</p>
+    <p><strong>Date Tenue:</strong> {{ selectedPresent.dateTenue | date }}</p>
+    <button (click)="onUpdatePresent(selectedPresent)">Update</button>
+    <button (click)="onDeletePresent(selectedPresent)">Delete</button>
+  </div>
+
+  <div class="create-present-form" *ngIf="!selectedPresent">
+    <h3>Create New Present</h3>
+    <form [formGroup]="presentForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="idEmetteur">Id Emetteur:</label>
+        <input type="text" id="idEmetteur" formControlName="idEmetteur" required>
+      </div>
+      <div class="form-group">
+        <label for="IdTypeAssemblee">Id Type Assemblee:</label>
+        <input type="text" id="IdTypeAssemblee" formControlName="IdTypeAssemblee" required>
+      </div>
+      <div class="form-group">
+        <label for="Matricule">Matricule:</label>
+        <input type="number" id="Matricule" formControlName="Matricule" required>
+      </div>
+      <div class="form-group">
+        <label for="dateTenue">Date Tenue:</label>
+        <input type="date" id="dateTenue" formControlName="dateTenue" required>
+      </div>
+      <button type="submit" [disabled]="presentForm.invalid">Create</button>
     </form>
   </div>
-  
-  <div>
-    <input placeholder="Search" (input)="applyFilter($event)" />
-  </div>
-  
-  <table mat-table [dataSource]="filteredPresents" class="mat-elevation-z8">
-    <ng-container matColumnDef="matricule">
-      <th mat-header-cell *matHeaderCellDef> Matricule </th>
-      <td mat-cell *matCellDef="let element"> {{element.matricule}} </td>
-    </ng-container>
-  
-    <ng-container matColumnDef="emetteur">
-      <th mat-header-cell *matHeaderCellDef> Emetteur </th>
-      <td mat-cell *matCellDef="let element"> {{element.emetteur.LibelleCourt}} </td>
-    </ng-container>
-  
-    <ng-container matColumnDef="typeAssemblee">
-      <th mat-header-cell *matHeaderCellDef> Type Assemblee </th>
-      <td mat-cell *matCellDef="let element"> {{element.typeAssemblee.name}} </td>
-    </ng-container>
-  
-    <ng-container matColumnDef="solde">
-      <th mat-header-cell *matHeaderCellDef> Solde </th>
-      <td mat-cell *matCellDef="let element"> {{element.solde.solde}} </td>
-    </ng-container>
-  
-    <ng-container matColumnDef="typePresence">
-      <th mat-header-cell *matHeaderCellDef> Type Presence </th>
-      <td mat-cell *matCellDef="let element"> {{element.typePresence}} </td>
-    </ng-container>
-  
-    <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef> Actions </th>
-      <td mat-cell *matCellDef="let element">
-        <button (click)="editPresents(element)">Edit</button>
-        <button (click)="deletePresents(element.matricule)">Delete</button>
-      </td>
-    </ng-container>
-  
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
-  
-  <div *ngIf="filteredPresents.length === 0" colspan="6">
-    No data matching the filter "{{ searchFilter }}"
-  </div>
-  
+</div>

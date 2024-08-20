@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Presents, PresentsId } from '../../Models/presents';
 import { PresentsService } from '../../Services/presents.service';
-import { Presents } from '../../Models/presents';
 
 @Component({
   selector: 'app-presents',
@@ -9,64 +9,63 @@ import { Presents } from '../../Models/presents';
   styleUrls: ['./presents.component.css']
 })
 export class PresentsComponent implements OnInit {
-  presentsForm: FormGroup;
+
   presents: Presents[] = [];
-  filteredPresents: Presents[] = [];
-  searchFilter: string = '';
-  isEditMode: boolean = false;
+  selectedPresent: Presents | null = null;
+  presentForm: FormGroup;
 
-  displayedColumns: string[] = ['matricule', 'emetteur', 'typeAssemblee', 'solde', 'typePresence', 'actions'];
-
-  constructor(private fb: FormBuilder, private presentsService: PresentsService) {
-    this.presentsForm = this.fb.group({
-      matricule: [''],
-      emetteur: [''],
-      typeAssemblee: [''],
-      solde: [''],
-      typePresence: ['']
+  constructor(private presentsService: PresentsService, private fb: FormBuilder) {
+    this.presentForm = this.fb.group({
+      idEmetteur: ['', Validators.required],
+      IdTypeAssemblee: ['', Validators.required],
+      Matricule: ['', Validators.required],
+      dateTenue: ['', Validators.required]
     });
   }
 
   ngOnInit(): void {
-    this.loadPresents();
+    this.presentsService.getAllPresents().subscribe(data => this.presents = data);
   }
 
-  loadPresents(): void {
-    this.presentsService.getAllPresents().subscribe(data => {
-      this.presents = data;
-      this.filteredPresents = data;
-    });
+  onSelectPresent(present: Presents): void {
+    this.selectedPresent = present;
   }
 
   onSubmit(): void {
-    if (this.isEditMode) {
-      // Update logic
-    } else {
-      this.presentsService.addPresents(this.presentsForm.value).subscribe(() => {
-        this.loadPresents();
-        this.presentsForm.reset();
+    if (this.presentForm.valid) {
+      const present: Presents = this.presentForm.value;
+      console.log('Submitting Presents:', present);  // Log the payload
+      this.presentsService.createPresents(present).subscribe(newPresent => {
+        this.presents.push(newPresent);
+        this.presentForm.reset();
+        this.selectedPresent = null; // Clear selection after creation
       });
     }
   }
-
-  deletePresents(presentsId: any): void {
-    this.presentsService.deletePresents(presentsId).subscribe(() => {
-      this.loadPresents();
+  
+  onUpdatePresent(present: Presents): void {
+    const id: PresentsId = {
+      idEmetteur: present.idEmetteur,
+      IdTypeAssemblee: present.IdTypeAssemblee,
+      Matricule: present.Matricule,
+      IdPresent: present.IdPresent
+    };
+    this.presentsService.updatePresents(id, present).subscribe(updatedPresent => {
+      if (updatedPresent) {
+        const index = this.presents.findIndex(p => p.IdPresent === updatedPresent.IdPresent);
+        this.presents[index] = updatedPresent;
+      }
+      this.selectedPresent = null; // Clear selection after update
     });
   }
 
-  applyFilter(event: Event): void {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.filteredPresents = this.presents.filter(p => p.matricule.toLowerCase().includes(filterValue.toLowerCase()));
-  }
-
-  editPresents(presents: Presents): void {
-    this.isEditMode = true;
-    this.presentsForm.patchValue(presents);
-  }
-
-  cancelEdit(): void {
-    this.isEditMode = false;
-    this.presentsForm.reset();
+  onDeletePresent(id: PresentsId): void {
+    this.presentsService.deletePresents(id).subscribe(() => {
+      const index = this.presents.findIndex(p => p.IdPresent === id.IdPresent);
+      if (index !== -1) {
+        this.presents.splice(index, 1);
+      }
+      this.selectedPresent = null; // Clear selection after deletion
+    });
   }
 }

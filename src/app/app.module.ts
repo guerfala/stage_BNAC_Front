@@ -42,8 +42,8 @@ import { JournalComponent } from './Historique/journal/journal.component';
 import { MouvementsComponent } from './Historique/mouvements/mouvements.component';
 import { TraitementComponent } from './Referentiel/traitement/traitement.component';
 import { AssembleeComponent } from './Referentiel/assemblee/assemblee.component';
-import { PresentsComponent } from './Referentiel/presents/presents.component';
 import { AutoSuggestionComponent } from './Referentiel/auto-suggestion/auto-suggestion.component';
+import { PresentsComponent } from './Referentiel/presents/presents.component';
 
 
 @NgModule({ declarations: [
@@ -64,8 +64,8 @@ import { AutoSuggestionComponent } from './Referentiel/auto-suggestion/auto-sugg
     MouvementsComponent,
     TraitementComponent,
     AssembleeComponent,
-    PresentsComponent,
     AutoSuggestionComponent,
+    PresentsComponent,
 
         
     ],

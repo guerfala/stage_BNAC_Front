@@ -13,7 +13,7 @@ export class EmetteurService {
   constructor(private httpClient: HttpClient) { }
 
   getEmetteurList(): Observable<Emetteur[]>{
-    return this.httpClient.get<Emetteur[]>(`${this.baseURL+"ShowAllEmetteur"}`);
+    return this.httpClient.get<Emetteur[]>(`${this.baseURL}/ShowAllEmetteur`);
   }
 
   getAllEmetteurLibelleCourt(): Observable<string[]> {
