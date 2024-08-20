@@ -62,7 +62,15 @@ export class ImportService {
   exportFGO(emetteurId: string, titreId: string, minDate: Date, maxDate: Date): Observable<any> {
     const formattedMinDate = minDate.toISOString();
     const formattedMaxDate = maxDate.toISOString();
-    return this.http.get(`${this.baseUrl}/download/${emetteurId}/${titreId}/${formattedMinDate}/${formattedMaxDate}`, {
+    return this.http.get(`${this.baseUrl}/downloadFGO/${emetteurId}/${titreId}/${formattedMinDate}/${formattedMaxDate}`, {
+        responseType: 'blob' as 'json' // Ensure it handles the binary data
+    });
+  }
+
+  exportFCRA(emetteurId: string, titreId: string, minDate: Date, maxDate: Date): Observable<any> {
+    const formattedMinDate = minDate.toISOString();
+    const formattedMaxDate = maxDate.toISOString();
+    return this.http.get(`${this.baseUrl}/downloadFCRA/${emetteurId}/${titreId}/${formattedMinDate}/${formattedMaxDate}`, {
         responseType: 'blob' as 'json' // Ensure it handles the binary data
     });
   }

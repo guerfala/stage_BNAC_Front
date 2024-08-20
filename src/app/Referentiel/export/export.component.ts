@@ -2,9 +2,6 @@ import { Component, ViewChild } from '@angular/core';
 import { EmetteurService } from '../../Services/emetteur.service';
 import { TitreService } from '../../Services/titre.service';
 import { ImportService } from '../../Services/import.service';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
 import { FGO } from '../../Models/fgo';
 
 @Component({
@@ -22,13 +19,6 @@ export class ExportComponent {
   minDate!: Date;
   maxDate!: Date;
   export: FGO[] = [];
-
-  displayedColumnsFGO: string[] = ['CodeBIC', 'CodeParticipant', 'NatureProp', 'Nom', 'Prenom', 'NomArabe', 'CodeNaturePiece', 'NumPiece', 'DateNaissance', 'CategorieInves', 'Secteur', 'Nationalite', 
-    'Resident', 'Adresse', 'RefOp', 'DateOp'];
-  dataSource!: MatTableDataSource <any>;
-
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
 
   constructor(private emetteurService: EmetteurService, private titreService: TitreService, private importService: ImportService) { }
 
@@ -56,6 +46,16 @@ onTitreChange(event: any) {
 Export(){
   if(this.selectedRadioOption == "FCRA")
   {
+    this.importService.exportFCRA(this.selectedEmetteur, this.selectedTitre, this.minDate, this.maxDate)
+    .subscribe((blob: Blob) => {
+        const link = document.createElement('a');
+        const url = window.URL.createObjectURL(blob);
+        link.href = url;
+        link.download = 'FCRA.reg';
+        link.click();
+        window.URL.revokeObjectURL(url);
+        console.log("Registry file exported");
+    });
   }
   else if(this.selectedRadioOption == "FGO")
   {
