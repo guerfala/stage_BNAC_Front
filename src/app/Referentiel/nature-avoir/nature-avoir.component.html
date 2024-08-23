@@ -1,0 +1,72 @@
+<div class="container">
+  <h2>Nature Avoir List</h2>
+
+  <!-- Search Input -->
+  <mat-form-field>
+    <mat-label>Recherche par Libelle </mat-label>
+    <input matInput type="text" [(ngModel)]="searchLibelle" (input)="applyFilter()" placeholder="Type to search...">
+    <button mat-button *ngIf="searchLibelle" matSuffix mat-icon-button aria-label="Clear" (click)="clearSearch()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+
+  <!-- Table displaying Nature Avoir list -->
+  <table mat-table [dataSource]="filteredNatureAvoirs" class="mat-elevation-z8">
+    <!-- ID Column -->
+     
+    <ng-container matColumnDef="idNatureAvoirs">
+      <th mat-header-cell *matHeaderCellDef>ID</th>
+      <td mat-cell *matCellDef="let element">{{ element.idNatureAvoirs }}</td>
+    </ng-container>
+
+    <!-- Libelle Column -->
+    <ng-container matColumnDef="libelle">
+      <th mat-header-cell *matHeaderCellDef>Libelle</th>
+      <td mat-cell *matCellDef="let element">{{ element.libelle }}</td>
+    </ng-container>
+
+    <!-- CodeCategorieAvoir Column -->
+    <ng-container matColumnDef="codeCategorieAvoir">
+      <th mat-header-cell *matHeaderCellDef>Code Categorie Avoir</th>
+      <td mat-cell *matCellDef="let element">{{ element.codeCategorieAvoir }}</td>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-icon-button color="primary" (click)="editNatureAvoir(element)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="openDeleteConfirmationDialog(element.idNatureAvoirs)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <!-- Header Row -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+    <!-- Data Rows -->
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    <!-- Placeholder for empty table -->
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4">No data matching the filter "{{ searchLibelle }}"</td>
+    </tr>
+  </table>
+
+  <!-- Form for Add/Edit -->
+  <h2>{{ isEdit ? 'Edit' : 'Add' }} Nature Avoir</h2>
+  <form #natureAvoirForm="ngForm" (ngSubmit)="isEdit ? updateNatureAvoir() : addNatureAvoir(natureAvoirForm)">
+    <mat-form-field appearance="fill">
+      <mat-label>Libelle</mat-label>
+      <input matInput type="text" [(ngModel)]="natureAvoir.libelle" name="libelle" required>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Code Categorie Avoir</mat-label>
+      <input matInput type="text" [(ngModel)]="natureAvoir.codeCategorieAvoir" name="codeCategorieAvoir" required>
+    </mat-form-field>
+    <button type="submit" class="btn btn-success">{{ isEdit ? 'Update' : 'Add' }}</button>
+  </form>
+</div>
