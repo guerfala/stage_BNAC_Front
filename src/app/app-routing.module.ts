@@ -9,6 +9,12 @@ import { MouvementsComponent } from './Historique/mouvements/mouvements.componen
 import { ImportComponent } from './Referentiel/import/import.component';
 import { TraitementComponent } from './Referentiel/traitement/traitement.component';
 import { ExportComponent } from './Referentiel/export/export.component';
+import { TeneurCompteComponent } from './Historique/teneur-compte/teneur-compte.component';
+import { NatureAvoirComponent } from './Historique/nature-avoir/nature-avoir.component';
+import { TitreComponent } from './Historique/titre/titre.component';
+import { NatureCompteTitreComponent } from './Historique/nature-compte-titre/nature-compte-titre.component';
+import { PresentsComponent } from './Referentiel/presents/presents.component';
+import { AssembleeComponent } from './Referentiel/assemblee/assemblee.component';
 
 const routes: Routes = [
   {path: 'actionnaire', component: ActionnaireComponent},
@@ -20,6 +26,14 @@ const routes: Routes = [
   {path: 'import', component: ImportComponent},
   {path: 'traitement', component: TraitementComponent},
   {path: 'export', component: ExportComponent},
+
+  { path: 'teneur-compte', component: TeneurCompteComponent},
+  { path: 'nature-avoir', component: NatureAvoirComponent},
+  { path: 'nature-compte-titre', component: NatureCompteTitreComponent},
+  { path: 'titre', component: TitreComponent},
+
+  {path : 'presents',component:PresentsComponent},
+  {path : 'assemblee',component:AssembleeComponent},
 ];
 
 @NgModule({

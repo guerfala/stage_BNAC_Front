@@ -21,4 +21,21 @@ export class TeneurCompteService {
     const formattedDate = selectedDate.toISOString();
     return this.httpClient.get<TeneurCompteDTO[]>(`${this.baseURL}ShowAllTeneurCompteWithSolde/${idTitre}/${formattedDate}`);
   }
+
+  addTeneurCompte(teneurCompte: TeneurCompte): Observable<void> {
+    return this.httpClient.post<void>(`${this.baseURL}/AddTeneurCompte`, teneurCompte);
+  }
+
+  updateTeneurCompte(id: string, teneurCompte: TeneurCompte): Observable<void> {
+    return this.httpClient.put<void>(`${this.baseURL}/UpdateTeneurCompte/${id}`, teneurCompte);
+  }
+
+  deleteTeneurCompte(id: string): Observable<void> {
+    return this.httpClient.delete<void>(`${this.baseURL}/DeleteTeneurCompte/${id}`);
+  }
+  
+  getAllTeneurCompte(): Observable<TeneurCompte[]> {
+    return this.httpClient.get<TeneurCompte[]>(`${this.baseURL}/ShowAllTeneurCompte`);
+  }
+
 }

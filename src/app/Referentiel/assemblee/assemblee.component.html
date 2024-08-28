@@ -1,0 +1,88 @@
+<div class="container">
+  <form [formGroup]="assembleeForm" (ngSubmit)="saveAssemblee()">
+    <mat-form-field appearance="fill">
+      <mat-label>Type Assemblee</mat-label>
+      <mat-select formControlName="typeAssemblee">
+        <mat-option *ngFor="let type of typeAssemblees" [value]="type.idTypeAssemblee">
+          {{ type.libelle }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Emetteur</mat-label>
+      <input 
+        matInput 
+        [formControl]="emetteurCtrl" 
+        [matAutocomplete]="auto" 
+        placeholder="Search emetteurs">
+      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectEmetteur($event.option.value)" [displayWith]="displayEmetteur">
+        <mat-option *ngFor="let emetteur of filteredEmetteurs$ | async" [value]="emetteur">
+          {{ emetteur.libelleCourt }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Date Tenue</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="dateTenue">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Lieu</mat-label>
+      <input matInput formControlName="lieu">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Libelle</mat-label>
+      <input matInput formControlName="libelle">
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit">Save</button>
+  </form>
+
+  <div>
+    <h2>Assemblees</h2>
+    <table mat-table [dataSource]="assemblees" class="mat-elevation-z8">
+      <ng-container matColumnDef="typeAssemblee">
+        <th mat-header-cell *matHeaderCellDef>Type Assemblee</th>
+        <td mat-cell *matCellDef="let element">{{ element.typeAssemblee?.libelle }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="emetteur">
+        <th mat-header-cell *matHeaderCellDef>Emetteur</th>
+        <td mat-cell *matCellDef="let element">{{ element.emetteur?.LibelleCourt }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="dateTenue">
+        <th mat-header-cell *matHeaderCellDef>Date Tenue</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.dateTenue | date:'dd/MM/yyyy HH:mm:ss' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="lieu">
+        <th mat-header-cell *matHeaderCellDef>Lieu</th>
+        <td mat-cell *matCellDef="let element">{{ element.lieu }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="libelle">
+        <th mat-header-cell *matHeaderCellDef>Libelle</th>
+        <td mat-cell *matCellDef="let element">{{ element.libelle }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-button (click)="editAssemblee(element)">Edit</button>
+          <button mat-button (click)="deleteAssemblee(element.idAssemblee)">Delete</button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+</div>

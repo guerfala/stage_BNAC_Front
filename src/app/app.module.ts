@@ -27,6 +27,19 @@ import { ImportComponent } from './Referentiel/import/import.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { TraitementComponent } from './Referentiel/traitement/traitement.component';
 import { ExportComponent } from './Referentiel/export/export.component';
+import { AssembleeComponent } from './Referentiel/assemblee/assemblee.component';
+import { AutoSuggestionComponent } from './Referentiel/auto-suggestion/auto-suggestion.component';
+import { JournalNComponent } from './Referentiel/journal-n/journal-n.component';
+import { MouvementNComponent } from './Referentiel/mouvement-n/mouvement-n.component';
+import { PresentsComponent } from './Referentiel/presents/presents.component';
+import { TypeAssembleeComponent } from './Referentiel/type-assemblee/type-assemblee.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { TitreComponent } from './Historique/titre/titre.component';
+import { TeneurCompteComponent } from './Historique/teneur-compte/teneur-compte.component';
+import { NatureAvoirComponent } from './Historique/nature-avoir/nature-avoir.component';
+import { TypeOperationComponent } from './Historique/type-operation/type-operation.component';
+import { MatIconModule } from '@angular/material/icon';
+import { NatureCompteTitreComponent } from './Historique/nature-compte-titre/nature-compte-titre.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +53,17 @@ import { ExportComponent } from './Referentiel/export/export.component';
     ImportComponent,
     TraitementComponent,
     ExportComponent,
+    AssembleeComponent,
+    AutoSuggestionComponent,
+    JournalNComponent,
+    MouvementNComponent,
+    PresentsComponent,
+    TypeAssembleeComponent,
+    TitreComponent,
+    TeneurCompteComponent,
+    NatureAvoirComponent,
+    TypeOperationComponent,
+    NatureCompteTitreComponent,
   ],
   imports: [
     BrowserModule,
@@ -58,6 +82,8 @@ import { ExportComponent } from './Referentiel/export/export.component';
     MatNativeDateModule,
     MatRadioModule,
     ReactiveFormsModule,
+    MatAutocompleteModule,
+    MatIconModule,
   ],
   providers: [
     provideAnimationsAsync()
