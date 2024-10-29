@@ -40,6 +40,9 @@ import { NatureAvoirComponent } from './Historique/nature-avoir/nature-avoir.com
 import { TypeOperationComponent } from './Historique/type-operation/type-operation.component';
 import { MatIconModule } from '@angular/material/icon';
 import { NatureCompteTitreComponent } from './Historique/nature-compte-titre/nature-compte-titre.component';
+import { HeaderComponent } from './header/header.component';
+import { HomeComponent } from './home/home.component';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -64,6 +67,9 @@ import { NatureCompteTitreComponent } from './Historique/nature-compte-titre/nat
     NatureAvoirComponent,
     TypeOperationComponent,
     NatureCompteTitreComponent,
+    HeaderComponent,
+    HomeComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,

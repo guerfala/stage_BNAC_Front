@@ -17,18 +17,18 @@ export class NatureAvoirService {
   }
 
   getAllNatureAvoirs(): Observable<NatureAvoir[]> {
-    return this.httpClient.get<NatureAvoir[]>(`${this.baseURL}/getAllNatureAvoirs`);
+    return this.httpClient.get<NatureAvoir[]>(`${this.baseURL}getAllNatureAvoirs`);
   }
 
   addNatureAvoir(natureAvoir: NatureAvoir): Observable<NatureAvoir> {
-    return this.httpClient.post<NatureAvoir>(`${this.baseURL}/addNatureAvoir`, natureAvoir);
+    return this.httpClient.post<NatureAvoir>(`${this.baseURL}addNatureAvoir`, natureAvoir);
   }
 
   updateNatureAvoir(id: number, natureAvoir: NatureAvoir): Observable<NatureAvoir> {
-    return this.httpClient.put<NatureAvoir>(`${this.baseURL}/updateNatureAvoir/${id}`, natureAvoir);
+    return this.httpClient.put<NatureAvoir>(`${this.baseURL}updateNatureAvoir/${id}`, natureAvoir);
   }
 
   deleteNatureAvoir(id: number): Observable<void> {
-    return this.httpClient.delete<void>(`${this.baseURL}/deleteNatureAvoir/${id}`);
+    return this.httpClient.delete<void>(`${this.baseURL}deleteNatureAvoir/${id}`);
   }
 }

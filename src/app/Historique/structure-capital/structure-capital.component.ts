@@ -120,34 +120,31 @@ generatePdf() {
 
     // Table headers
   doc.setFontSize(10);
-  doc.text('IDTC', 10, 80);
-  doc.text('LibelleCourt', 25, 80);
-  doc.text('Nature de compte', 60, 80);
-  doc.text('Catégorie d\'avoirs', 110, 80);
-  doc.text('Solde', 180, 80);
+  doc.text('Matricule', 10, 80);
+  doc.text('Raison Sociale', 40, 80);
+  doc.text('Pourcentage', 110, 80);
+  doc.text('Solde', 160, 80);
 
   // Draw table headers horizontal line
   doc.setLineWidth(0.1);
   doc.line(10, 82, 200, 82);
 
   // Draw table rows
-  let row = 85;
+  let rowY = 90;
   this.dataSource.data.forEach((data: any, index: number) => {
-    doc.text(data.idTC, 10, row);
-    doc.text(data.libelleCourt, 25, row);
-    doc.text(data.codeNatureCompteTitre + ' ' + data.libelleNC, 60, row);
-    doc.text(data.codeCategorieAvoir + ' ' + data.libelleNa, 110, row);
-    doc.text(data.solde.toString(), 180, row);
-
-    // Draw horizontal line for each row
-    doc.line(10, row + 2, 200, row + 2); // Adjust x1, x2 as needed
-
-    row += 10; // Increase the row spacing to 10 for separation
-
-    if (row > 270) {
+    if (rowY > 270) {  // Avoid overflowing
       doc.addPage();
-      row = 20;  // Reset row for new page
+      rowY = 20;
     }
+
+    const wrappedRaisonSociale = doc.splitTextToSize(data.raisonSociale, 110 - 40 - 5);
+
+    doc.text(data.matricule.toString(), 10, rowY);
+    doc.text(wrappedRaisonSociale, 40, rowY);
+    doc.text(data.prtage.toString(), 110, rowY);
+    doc.text(data.solde.toString(), 160, rowY);
+
+    rowY += 15;
   });
 
     // Footer

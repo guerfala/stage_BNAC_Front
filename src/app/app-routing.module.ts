@@ -15,8 +15,12 @@ import { TitreComponent } from './Historique/titre/titre.component';
 import { NatureCompteTitreComponent } from './Historique/nature-compte-titre/nature-compte-titre.component';
 import { PresentsComponent } from './Referentiel/presents/presents.component';
 import { AssembleeComponent } from './Referentiel/assemblee/assemblee.component';
+import { LoginComponent } from './login/login.component';
+import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
+  {path: '', component: HomeComponent},
+
   {path: 'actionnaire', component: ActionnaireComponent},
   {path: 'etatactionnaire', component: EtatActionnaireComponent},
   {path: 'soldeTc', component: SoldeTCComponent},
@@ -34,6 +38,8 @@ const routes: Routes = [
 
   {path : 'presents',component:PresentsComponent},
   {path : 'assemblee',component:AssembleeComponent},
+
+  { path: 'login', component: LoginComponent },
 ];
 
 @NgModule({

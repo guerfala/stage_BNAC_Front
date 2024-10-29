@@ -15,6 +15,7 @@ import { NatureAvoir } from '../../Models/nature-avoir';
 import { Titre } from '../../Models/titre';
 import { Emetteur } from '../../Models/emetteur';
 import { PdfGeneratorService } from '../../Services/pdf-generator.service';
+import jsPDF from 'jspdf';
 
 @Component({
   selector: 'app-etat-actionnaire',
@@ -140,12 +141,83 @@ export class EtatActionnaireComponent implements OnInit {
       this.dataSource.filter = filterValue;
     }
 
-    exportToPdf(): void {
-      // Extract data from the data source (assuming dataSource.data contains your table data)
-      const dataToExport = this.dataSource.data;
-  
-      // Generate PDF with the extracted data
-      this.pdfGeneratorService.generatePdf(dataToExport, 'exported-data');
+    generatePdf() {
+      const doc = new jsPDF('p', 'mm', 'a4');
+      const logo = new Image();
+      logo.src = '../../../assets/img/logoBNAC.png';  // Path to your logo image
+    
+      logo.onload = () => {
+        // Add Logo
+        doc.addImage(logo, 'PNG', 10, 10, 50, 20);
+    
+        // Header section
+        doc.setFontSize(10);
+        doc.text('Intermédiaire en bourse', 10, 35);
+        doc.text('Agrément: 26-95 Du 29/05/95', 10, 40);
+        doc.text('Les Berges du Lac, le', 170, 10);
+        doc.text('19/06/2024', 170, 15);
+        doc.setFontSize(16);
+        doc.text('Solde/TC', 105, 50, { align: 'center' });
+    
+        // Sub-header
+        doc.setFontSize(9);
+        doc.text('Emetteur: SOMOCER', 105, 60, { align: 'center' });
+        doc.text('Titre: SOMOCER', 105, 65, { align: 'center' });
+        doc.text('A la date du 18/06/2024', 105, 70, { align: 'center' });
+    
+        // Table headers with adjusted x positions
+        const headers = ['Matricule', 'Nom et Prenom', 'Identifiant', 'Libelle Court', 'Solde', 'Code Nature Compte', 'Code Categorie Avoir', 'Adresse'];
+        const startX = [10, 25, 55, 85, 105, 135, 165, 190, 215];  // Adjust these values for better spacing
+        let startY = 80;
+        doc.setFontSize(9);
+        
+        doc.setFontSize(9);
+        doc.text('Matricule', 10, 80);
+        doc.text('Nom et Prenom', 25, 80);
+        doc.text('Identifiant', 55, 80);
+        doc.text('Libelle Court', 85, 80);
+        doc.text('Solde', 105, 80);
+        doc.text('Code Nature Compte Titre', 118, 80);
+        doc.text('Code Categorie Avoir', 158, 80);
+        doc.text('Adresse', 190, 80);
+    
+        // Adjust row height for multi-line text
+        let rowY = startY + 10;
+        this.dataSource.data.forEach((data: any) => {
+          if (rowY > 270) {  // Avoid overflowing
+            doc.addPage();
+            rowY = 20;
+          }
+    
+          // Wrap long text (e.g., raisonSociale) that reaches the next startX
+          const wrappedRaisonSociale = doc.splitTextToSize(data.raisonSociale, startX[2] - startX[1] - 5);  // Adjust width to fit within columns
+          const wrappedLibelleCourt = doc.splitTextToSize(data.libelleCourt, startX[4] - startX[3] - 5);
+          const wrappedAdresse = doc.splitTextToSize(data.adresse, startX[8] - startX[7]);
+    
+          const maxLines = Math.max(wrappedRaisonSociale.length, wrappedLibelleCourt.length); // Calculate max number of lines
+    
+          doc.text(data.matricule.toString(), startX[0], rowY);  // Matricule
+          doc.text(wrappedRaisonSociale, startX[1], rowY);       // Raison Sociale with wrapping
+          doc.text(data.identifiant, startX[2], rowY);           // Identifiant
+          doc.text(wrappedLibelleCourt, startX[3], rowY);        // Libelle Court with wrapping
+          doc.text(data.solde.toString(), startX[4], rowY);      // Solde
+          doc.text(data.codeNatureCompteTitre, startX[5], rowY); // Code Nature Compte Titre
+          doc.text(data.codeCategorieAvoir, startX[6], rowY);    // Code Categorie Avoir
+          doc.setFontSize(6);
+          doc.text(wrappedAdresse, startX[7], rowY);               // Adresse
+          doc.setFontSize(9);
+    
+          // Move to next row (increase by line height * number of lines for the wrapped text)
+          rowY += 15;
+        });
+    
+        // Footer
+        doc.setFontSize(10);
+        doc.text('Footer text here...', 10, 290);
+    
+        doc.save('etat-actionnaire.pdf');
+      };
     }
+    
 
 }

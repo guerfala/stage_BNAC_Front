@@ -293,182 +293,78 @@ sortByIdTC(order: string) {
 }
 
 generatePdf() {
+  const doc = new jsPDF('p', 'mm', 'a4');
+  const logo = new Image();
+  logo.src = '../../../assets/img/logoBNAC.png';  // Path to your logo image
 
-  if(this.matricule == 0)
-    {
-      const doc = new jsPDF('p', 'mm', 'a4');
-      const logo = new Image();
-      logo.src = '../../../assets/img/logoBNAC.png';  // Path to your logo image
+  logo.onload = () => {
+    doc.addImage(logo, 'PNG', 10, 10, 50, 20);  // Adjust image position and size
 
-      logo.onload = () => {
-        doc.addImage(logo, 'PNG', 10, 10, 50, 20);  // Adjust image position and size
+    // Add other static texts
+    doc.setFontSize(10);
+    doc.text('Intermédiaire en bourse', 10, 35);
+    doc.text('Agrément: 26-95 Du 29/05/95', 10, 40);
+    doc.text('Les Berges du Lac, le', 170, 10);
+    doc.text('19/06/2024', 170, 15);
+    doc.setFontSize(16);
+    doc.text('Solde/TC', 105, 50, { align: 'center' });
 
-        // Add other static texts
-        doc.setFontSize(10);
-        doc.text('Intermédiaire en bourse', 10, 35);
-        doc.text('Agrément: 26-95 Du 29/05/95', 10, 40);
-        doc.text('Les Berges du Lac, le', 170, 10);
-        doc.text('19/06/2024', 170, 15);
-        doc.setFontSize(16);
-        doc.text('Mouvement du ' + this.minDate.getDay() + "/" + this.minDate.getMonth() + "/" + this.minDate.getFullYear() + " au " + this.maxDate.getDay() + "/" + this.maxDate.getMonth() + "/" + this.maxDate.getFullYear(), 105, 50, { align: 'center' });
+    doc.setFontSize(9);
+    doc.text('Emetteur: SOMOCER', 105, 60, { align: 'center' });
+    doc.text('Titre: SOMOCER', 105, 65, { align: 'center' });
+    doc.text('A la date du 18/06/2024', 105, 70, { align: 'center' });
 
-        doc.setFontSize(9);
-        doc.text('Emetteur: ' + this.selectedEmetteur, 105, 56, { align: 'center' });
-        doc.text('Titre: ' + this.selectedTitre, 105, 61, { align: 'center' });
-        doc.text('A la date du ' + this.today, 105, 66, { align: 'center' });
+    // Table headers
+    doc.setFontSize(10);
+    doc.text('IdTc', 10, 80);
+    doc.text('Date Bourse', 25, 80);
+    doc.text('Type Opération', 50, 80);
+    doc.text('Raison Sociale', 80, 80);
+    doc.text('Titre', 110, 80);
+    doc.text('Numero Contrat', 140, 80);
+    doc.text('Debit', 170, 80);
+    doc.text('Credit', 190, 80);
 
-        // Table headers
-      doc.setFontSize(10);
-      doc.text('TC', 10, 75);
-      doc.text('Date Bourse', 35, 75);
-      doc.text('Raison Sociale', 60, 75);
-      doc.text('Numero Contrat', 133, 75);
-      doc.text('Achat', 163, 75);
-      doc.text('Vente', 178, 75);
-      doc.text('Cours', 190, 75);
+    // Draw table headers horizontal line
+    doc.setLineWidth(0.1);
+    doc.line(10, 82, 200, 82);
 
-      // Draw table headers horizontal line
-      doc.setLineWidth(0.1);
-      doc.line(10, 77, 200, 77);
-
-      // Draw table rows
-      let row = 85;
-      this.dataSource.data.forEach((data: any, index: number) => {
-        doc.text(data.libelleCourt, 10, row);
-        doc.text(data.dateBourse, 35, row);
-        doc.text(data.actionnaire, 60, row);
-        doc.text(data.numContrat, 135, row);
-        this.totalAchat= this.totalAchat + data.achat;
-        this.totalVente= this.totalVente + data.vente;
-        doc.text(data.achat.toString(), 165, row);
-        doc.text(data.vente.toString(), 180, row);
-        doc.text(data.cours.toString(), 190, row);
-
-        // Draw horizontal line for each row
-        doc.line(10, row + 2, 200, row + 2); // Adjust x1, x2 as needed
-
-        row += 10; // Increase the row spacing to 10 for separation
-
-        if (row > 270) {
-          doc.addPage();
-          row = 20;  // Reset row for new page
-        }
-      });
-
-      // Add totals row
-      if (row > 270) {
+    // Draw table rows
+    let rowY = 90;
+    this.dataSource.data.forEach((data: any, index: number) => {
+      if (rowY > 270) {  // Avoid overflowing
         doc.addPage();
-        row = 20;  // Reset row for new page
+        rowY = 20;
       }
 
-      doc.setFontSize(15);
-      doc.text('Total', 135, row);
-      doc.text(this.totalAchat.toString(), 155, row);
-      doc.text(this.totalVente.toString(), 180, row);
-      doc.line(10, row + 2, 200, row + 2); // Draw line below totals
+      const wrappedTypeop = doc.splitTextToSize(data.type, 80 - 50 - 5);
+      const wrappedRaisonSociale = doc.splitTextToSize(data.raisonSociale, 110 - 80 - 5);
+      const wrappedNumContrat = doc.splitTextToSize(data.numContrat, 170 - 140 - 5);
 
-        // Footer
-        doc.setFontSize(10);
-        doc.text('SA au capital de 5 000 000 Dinars', 10, 290);
-        doc.text('R.C.: 8145651997', 10, 295);
-        doc.text('T.V.A.: 496517CAM000', 10, 300);
-        doc.text('Site Web: www.bna.capital.com', 150, 290);
-        doc.text('Complexe le Banquier - Av. Tahar Haddad - Tél: 71 139 500', 10, 305);
-        doc.text('Fax: 71 656 299', 150, 295);
-        doc.text('Email: Webmaster@bna.capital.com', 150, 300);
+      doc.text(data.tc, 10, rowY);
+      doc.text(data.dateBourse, 25, rowY);
+      doc.text(wrappedTypeop, 50, rowY);
+      doc.text(wrappedRaisonSociale, 80, rowY);
+      doc.text(data.idTitre, 110, rowY);
+      doc.text(wrappedNumContrat, 140, rowY);
+      doc.text(data.debit.toString(), 170, rowY);
+      doc.text(data.credit.toString(), 190, rowY);
 
-        doc.save('solde-tc.pdf');
-      };
-    }
-  else
-    {
-      const doc = new jsPDF('p', 'mm', 'a4');
-      const logo = new Image();
-      logo.src = '../../../assets/img/logoBNAC.png';  // Path to your logo image
+      rowY += 15;
+    });
 
-      logo.onload = () => {
-        doc.addImage(logo, 'PNG', 10, 10, 50, 20);  // Adjust image position and size
-
-        // Add other static texts
-        doc.setFontSize(10);
-        doc.text('Intermédiaire en bourse', 10, 35);
-        doc.text('Agrément: 26-95 Du 29/05/95', 10, 40);
-        doc.text('Les Berges du Lac, le', 170, 10);
-        doc.text('19/06/2024', 170, 15);
-        doc.setFontSize(16);
-        doc.text('Mouvement du ' + this.minDate.getDay() + "/" + this.minDate.getMonth() + "/" + this.minDate.getFullYear() + " au " + this.maxDate.getDay() + "/" + this.maxDate.getMonth() + "/" + this.maxDate.getFullYear(), 105, 50, { align: 'center' });
-
-        doc.setFontSize(9);
-        doc.text('Emetteur: ' + this.selectedEmetteur, 105, 55, { align: 'center' });
-        doc.text('Titre: ' + this.selectedTitre, 105, 60, { align: 'center' });
-        doc.text('Actionnaire: ' + this.dataSource.data[0].actionnaire, 145, 65, { align: 'center' });
-        doc.text('Solde: ' + this.dataSource.data[0].solde, 105, 70, { align: 'center' });
-        doc.text('A la date du ' + this.today, 105, 75, { align: 'center' });
-
-        // Table headers
+      // Footer
       doc.setFontSize(10);
-      doc.text('TC', 10, 86);
-      doc.text('Date Bourse', 35, 86);
-      doc.text('Raison Sociale', 60, 86);
-      doc.text('Numero Contrat', 133, 86);
-      doc.text('Achat', 163, 86);
-      doc.text('Vente', 178, 86);
-      doc.text('Cours', 190, 86);
+      doc.text('SA au capital de 5 000 000 Dinars', 10, 290);
+      doc.text('R.C.: 8145651997', 10, 295);
+      doc.text('T.V.A.: 496517CAM000', 10, 300);
+      doc.text('Site Web: www.bna.capital.com', 150, 290);
+      doc.text('Complexe le Banquier - Av. Tahar Haddad - Tél: 71 139 500', 10, 305);
+      doc.text('Fax: 71 656 299', 150, 295);
+      doc.text('Email: Webmaster@bna.capital.com', 150, 300);
 
-      // Draw table headers horizontal line
-      doc.setLineWidth(0.1);
-      doc.line(10, 88, 200, 88);
-
-      // Draw table rows
-      let row = 95;
-      this.dataSource.data.forEach((data: any, index: number) => {
-        doc.text(data.libelleCourt, 10, row);
-        doc.text(data.dateBourse, 35, row);
-        doc.text(data.actionnaire, 60, row);
-        doc.text(data.numContrat, 135, row);
-        this.totalAchat= this.totalAchat + data.achat;
-        this.totalVente= this.totalVente + data.vente;
-        doc.text(data.achat.toString(), 165, row);
-        doc.text(data.vente.toString(), 180, row);
-        doc.text(data.cours.toString(), 190, row);
-
-        // Draw horizontal line for each row
-        doc.line(10, row + 2, 200, row + 2); // Adjust x1, x2 as needed
-
-        row += 10; // Increase the row spacing to 10 for separation
-
-        if (row > 270) {
-          doc.addPage();
-          row = 20;  // Reset row for new page
-        }
-      });
-
-      // Add totals row
-      if (row > 270) {
-        doc.addPage();
-        row = 20;  // Reset row for new page
-      }
-
-      doc.setFontSize(15);
-      doc.text('Total', 135, row);
-      doc.text(this.totalAchat.toString(), 155, row);
-      doc.text(this.totalVente.toString(), 180, row);
-      doc.line(10, row + 2, 200, row + 2); // Draw line below totals
-
-        // Footer
-        doc.setFontSize(10);
-        doc.text('SA au capital de 5 000 000 Dinars', 10, 290);
-        doc.text('R.C.: 8145651997', 10, 295);
-        doc.text('T.V.A.: 496517CAM000', 10, 300);
-        doc.text('Site Web: www.bna.capital.com', 150, 290);
-        doc.text('Complexe le Banquier - Av. Tahar Haddad - Tél: 71 139 500', 10, 305);
-        doc.text('Fax: 71 656 299', 150, 295);
-        doc.text('Email: Webmaster@bna.capital.com', 150, 300);
-
-        doc.save('solde-tc.pdf');
-      };
+      doc.save('solde-tc.pdf');
+    };
     }
-
-}
 
 }
