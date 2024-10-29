@@ -10,7 +10,7 @@ import { User } from '../Models/user';
 })
 export class LoginComponent {
 
-  email!: string;
+  username!: string;
   password!: string;
   user!: User;
 
@@ -19,11 +19,11 @@ export class LoginComponent {
   login(event: Event)
   {
     event.preventDefault();
-    this.loginService.login(this.email, this.password).subscribe(data => {
+    this.loginService.login(this.username, this.password).subscribe(data => {
       this.user = data;
       
       if (this.user) {
-        this.router.navigate(['/ShowAll']);  // Replace '/dashboard' with the desired route
+        this.router.navigate(['/home']);
       }
     }, error => {
       console.error('Login failed', error);

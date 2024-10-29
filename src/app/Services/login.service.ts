@@ -7,15 +7,15 @@ import { User } from '../Models/user';
   providedIn: 'root'
 })
 export class LoginService {
-  
+
   private baseURL="http://localhost:8081/bnac/"
 
   constructor(private httpClient: HttpClient) { }
 
-  login(email: string, password: string): Observable<User> {
-    return this.httpClient.get<User>(`${this.baseURL}/login`, {
+  login(username: string, password: string): Observable<User> {
+    return this.httpClient.get<User>(`${this.baseURL}login`, {
       params: {
-        email: email,
+        username: username,
         password: password
       }
     });

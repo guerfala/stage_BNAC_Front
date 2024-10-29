@@ -19,7 +19,9 @@ import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
-  {path: '', component: HomeComponent},
+  {path: '', component: LoginComponent},
+  {path: 'login', component: LoginComponent},
+  {path: 'home', component: HomeComponent},
 
   {path: 'actionnaire', component: ActionnaireComponent},
   {path: 'etatactionnaire', component: EtatActionnaireComponent},
