@@ -21,18 +21,18 @@ export class TitreService {
   }
 
   getAllTitres(): Observable<Titre[]> {
-    return this.httpClient.get<Titre[]>(`${this.baseURL}/getAllTitres`); 
+    return this.httpClient.get<Titre[]>(`${this.baseURL}getAllTitres`); 
   }
   addTitre(titre: Titre): Observable<Titre> {
     return this.httpClient.post<Titre>(this.baseURL, titre);
   }
 
   updateTitre(id: string, titre: Titre): Observable<Titre> {
-    return this.httpClient.put<Titre>(`${this.baseURL}/${id}`, titre);
+    return this.httpClient.put<Titre>(`${this.baseURL}${id}`, titre);
   }
 
   deleteTitre(id: string): Observable<void> {
-    return this.httpClient.delete<void>(`${this.baseURL}/${id}`);
+    return this.httpClient.delete<void>(`${this.baseURL}${id}`);
   }
 
  
@@ -53,7 +53,7 @@ export class TitreService {
       params = params.set('idEmetteur', criteria.idEmetteur);
     }
 
-    return this.httpClient.get<Titre[]>(`${this.baseURL}/searchTitres`, { params })
+    return this.httpClient.get<Titre[]>(`${this.baseURL}searchTitres`, { params })
       .toPromise()
       .then(data => data as Titre[]) // Cast to Titre[] explicitly
       .catch(error => {

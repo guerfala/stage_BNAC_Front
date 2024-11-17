@@ -13,7 +13,7 @@ export class TypeAssembleeService {
   constructor(private http: HttpClient) { }
 
   getAllTypeAssemblees(): Observable<TypeAssemblee[]> {
-    return this.http.get<TypeAssemblee[]>(`${this.baseUrl}/getAllTypeAssemblees`);
+    return this.http.get<TypeAssemblee[]>(`${this.baseUrl}getAllTypeAssemblees`);
   }
 
 }

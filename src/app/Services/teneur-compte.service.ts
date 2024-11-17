@@ -9,7 +9,7 @@ import { TeneurCompteDTO } from '../Models/teneur-compte-dto';
 })
 export class TeneurCompteService {
 
-  private baseURL="http://localhost:8081/bnac/"
+  private baseURL="http://localhost:8081/bnac"
 
   constructor(private httpClient: HttpClient) { }
 
